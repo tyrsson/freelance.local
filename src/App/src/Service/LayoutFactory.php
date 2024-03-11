@@ -1,0 +1,79 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Service;
+
+use Laminas\View\Model\ModelInterface;
+use Laminas\View\Model\ViewModel;
+use Psr\Container\ContainerInterface;
+
+use function basename;
+use function in_array;
+use function glob;
+
+final class LayoutFactory
+{
+    public function __invoke(ContainerInterface $container): ModelInterface
+    {
+        $enableLinks = [];
+        $config = $container->get('config');
+        $settings = $config['templates']['settings'];
+        $layout = new ViewModel($config['templates']['defaultParams']);
+        $layout->setTemplate('layout::default');
+        // add the settings
+        $layout->setVariable('settings', $settings);
+
+        $nav = new ViewModel();
+        $nav->setTemplate('partial::multi-page-nav');
+        $nav->setVariables(
+            [
+                'activeLinks' => $config['templates']['enabledPages'],
+                'enableDropDownMenu' => $settings['enableDropDownMenu'],
+            ]
+        );
+
+        $hero = new ViewModel();
+        $hero->setTemplate('partial::hero');
+
+        $footer = new ViewModel();
+        $footer->setTemplate('partial::footer');
+        $footer->setVariables(
+            [
+                'siteName' => $config['templates']['defaultParams']['siteName'],
+                'enableNewsletter' => $settings['enableNewsletter'],
+                'enableFooterLinks' => $settings['enableFooterLinks'],
+            ]
+        );
+        // assign layout properties that are models but not pages ;)
+        $layout->setVariables(
+            [
+                'nav'    => $nav,
+                'hero'   => $hero,
+                'footer' => $footer,
+                'enabledPages' => $config['templates']['enabledPages'],
+            ]
+        );
+        // assign the enabled pages as links in the correct order
+        //$nav->setVariable('activeLinks', $activeLinks);
+        //$layout->setVariable('enablePages', $activeLinks);
+        if (! $settings['multiPage']) {
+            // reset this for single page mode
+            $nav->setTemplate('partial::single-page-nav');
+            $path  = $config['templates']['paths']['page'][0];
+            $files = glob($path . '/*.phtml');
+            if (count($files) >= 1 && count($config['templates']['enabledPages']) >= 1) {
+                foreach ($files as $file) {
+                    $template = basename($file, '.phtml');
+                    if (in_array($template, $config['templates']['enabledPages'])) {
+                        $activeLinks[] = $template;
+                        $child    = new ViewModel();
+                        $child->setTemplate('page::' . $template);
+                        $layout->setVariable($template, $child);
+                    }
+                }
+            }
+        }
+        return $layout;
+    }
+}
