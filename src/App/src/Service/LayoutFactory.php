@@ -16,10 +16,9 @@ final class LayoutFactory
 {
     public function __invoke(ContainerInterface $container): ModelInterface
     {
-        $enableLinks = [];
-        $config = $container->get('config');
+        $config   = $container->get('config');
         $settings = $config['templates']['settings'];
-        $layout = new ViewModel($config['templates']['defaultParams']);
+        $layout   = new ViewModel($config['templates']['defaultParams']);
         $layout->setTemplate('layout::default');
         // add the settings
         $layout->setVariable('settings', $settings);
@@ -28,7 +27,7 @@ final class LayoutFactory
         $nav->setTemplate('partial::multi-page-nav');
         $nav->setVariables(
             [
-                'activeLinks' => $config['templates']['enabledPages'],
+                'activeLinks' => $config['templates']['enabledPages'], // creates a activeLink property in the scope of the nav.phtml tmpl
                 'enableDropDownMenu' => $settings['enableDropDownMenu'],
             ]
         );
@@ -54,9 +53,7 @@ final class LayoutFactory
                 'enabledPages' => $config['templates']['enabledPages'],
             ]
         );
-        // assign the enabled pages as links in the correct order
-        //$nav->setVariable('activeLinks', $activeLinks);
-        //$layout->setVariable('enablePages', $activeLinks);
+
         if (! $settings['multiPage']) {
             // reset this for single page mode
             $nav->setTemplate('partial::single-page-nav');
@@ -67,7 +64,7 @@ final class LayoutFactory
                     $template = basename($file, '.phtml');
                     if (in_array($template, $config['templates']['enabledPages'])) {
                         $activeLinks[] = $template;
-                        $child    = new ViewModel();
+                        $child         = new ViewModel();
                         $child->setTemplate('page::' . $template);
                         $layout->setVariable($template, $child);
                     }

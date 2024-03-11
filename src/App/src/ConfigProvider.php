@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App;
 
 use Laminas\View\Model\ModelInterface;
-use Mezzio\LaminasView\LaminasViewRenderer;
 
 /**
  * The configuration provider for the App module
@@ -23,8 +22,13 @@ class ConfigProvider
     public function __invoke(): array
     {
         return [
-            'dependencies' => $this->getDependencies(),
-            'templates'    => $this->getTemplates(),
+            'dependencies'       => $this->getDependencies(),
+            'templates'          => $this->getTemplates(),
+            /**
+             * This key is the key you will find targeted in the doctype helper factory.
+             * It can be added to any ConfigProvider to aggregate configuration to the view helpers
+             */
+            'view_helper_config' => $this->getViewHelperConfig(),
         ];
     }
 
@@ -39,6 +43,7 @@ class ConfigProvider
             ],
             'factories'  => [
                 Handler\HomePageHandler::class => Handler\HomePageHandlerFactory::class,
+                // This is most likely the most important Factory in the application currently
                 ModelInterface::class          => Service\LayoutFactory::class,
             ],
         ];
@@ -51,28 +56,43 @@ class ConfigProvider
     {
         return [
             'defaultParams' => [
+                // This is used anywhere the siteName template property is called
                 'siteName' => 'FreeLancersRus',
             ],
             /**
+             * These are rendered as they are listed here.
              * about, clients, contact, cta, faq, portfolio, pricing, services, skills, team, why
              */
             'enabledPages' => [
                 'about', 'services', 'faq', 'skills', 'contact',
             ],
             'paths' => [
+                /**
+                 * these are "namespaced", the key is the "namespace" in the form of 'app::templateName'.
+                 * Notice you do not pass the extension ie .phtml
+                 * See Handlers for usage example
+                 */
                 'app'     => [__DIR__ . '/../templates/app'],
                 'error'   => [__DIR__ . '/../templates/error'],
                 'layout'  => [__DIR__ . '/../templates/layout'],
                 'page'    => [__DIR__ . '/../templates/page'],
                 'partial' => [__DIR__ . '/../templates/partial'],
             ],
+            // bool true|false
             'settings' => [
-                'multiPage' => false,
-                'enableNewsletter' => false,
-                'enableFooterLinks' => false,
-                'enableDropDownMenu' => false,
+                'multiPage'               => false,
+                'enableNewsletter'        => false,
+                'enableFooterLinks'       => false,
+                'enableDropDownMenu'      => false,
                 'enableFooterContactInfo' => true,
             ],
+        ];
+    }
+
+    public function getViewHelperConfig(): array
+    {
+        return [
+            'doctype' => 'HTML5', // This is what allows the doctype helper to work in the layout
         ];
     }
 }
