@@ -14,6 +14,13 @@ use function glob;
 
 final class LayoutFactory
 {
+    /**
+     * The purpose of me doing this is so that when in single page mode we are only serving slightly dynamic
+     * pages. Which means that its just some config blah blah. So, I thought, why not just create a model
+     * per page and just assign them to the layout as properties. I've never done it this way so.. I thought
+     * why not. Plus its A LOT different than Axleus, so it gives another example of how flexible
+     * laminas and mezzio are. Even when using the same components :P
+     */
     public function __invoke(ContainerInterface $container): ModelInterface
     {
         $config   = $container->get('config');
