@@ -92,6 +92,12 @@ class ConfigProvider
                 'enableFooterLinks'       => false,
                 'enableDropDownMenu'      => false,
                 'enableFooterContactInfo' => true,
+                'contact' => [
+                    'enableMap' => false,
+                    'location'  => 'A108 Adam Street, New York, NY 535022',
+                    'email'     => 'info@example.com',
+                    'phone'     => '+1 5589 55488 55s',
+                ],
             ],
         ];
     }

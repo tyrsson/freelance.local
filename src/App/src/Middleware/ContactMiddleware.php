@@ -29,6 +29,7 @@ class ContactMiddleware implements MiddlewareInterface
                  * it was just enough so that I could go ahead and work out the server/client
                  * interaction to make sure the request/response was working as expected. However,
                  * with that said, the email will be sent from here.
+                 * todo: add sending email functionality
                  */
                 $request = $request->withAttribute('emailSent', true);
             } else {

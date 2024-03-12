@@ -73,6 +73,10 @@ final class LayoutFactory
                         $activeLinks[] = $template;
                         $child         = new ViewModel();
                         $child->setTemplate('page::' . $template);
+                        if (isset($settings[$template])) {
+                            // This tricky allows us to have a ['settings'][$template] and automatically inject them
+                            $child->setVariables($settings[$template]);
+                        }
                         $layout->setVariable($template, $child);
                     }
                 }
