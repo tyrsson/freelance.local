@@ -2,6 +2,23 @@
 
 declare(strict_types=1);
 
+/**
+ * Note that these do not get added to the buffer until they are echoed
+ * All calls up to the point of echoing the helper just adds them to the stack
+ * dependent on the call made. I like append since its easier to read.
+ *
+ * Its important to note here that all of the template files excute within the scope of
+ * Laminas\View\Renderer\PhpRenderer
+ * I mention this so that you can review that class and see how they use overloading and a plugin manager to
+ * provide the helpers. It's a common approach in OO. Sorta like a proxy pattern but not hardcore lol
+ *
+ * One of the few things left to do is to pass the multi-page flag through to the page models
+ * so that when in multi-page mode we can call the headTitle helper and it will append the
+ * page title to the base siteName that is passed here.
+ *
+ * I should also note, that in multi-page mode we could also do things like appending a js file that
+ * is needed only in the context of that particular template etc. Stylesheets can be pushed into the stack as well.
+ */
 $this->headLink()
     ->appendStylesheet('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i')
     ->appendStylesheet('/assets/vendor/aos/aos.css')
@@ -25,24 +42,24 @@ $this->inlineScript()
 ?>
 <?=$this->doctype()?>
 <html>
-<head>
-    <base href="/" />
-    <?php
-    $this->headMeta()
-        ->setCharSet('UTF-8')
-        ->appendName('viewport', 'width=device-width, initial-scale=1.0')
-        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge');
-    ?>
-    <?=$this->headTitle($this->siteName)->setSeparator(' - ')->setAutoEscape(false)?>
-    <?=$this->headMeta()?>
-    <?=$this->headLink(
-        [
-            'rel'  => 'shortcut icon',
-            'type' => 'image/png',
-            'href' => '/assets/img/favicon.png',
-        ]
-    )?>
-</head>
+    <head>
+        <base href="/" />
+        <?php
+        $this->headMeta()
+            ->setCharSet('UTF-8')
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge');
+        ?>
+        <?=$this->headTitle($this->siteName)->setSeparator(' - ')->setAutoEscape(false)?>
+        <?=$this->headMeta()?>
+        <?=$this->headLink(
+            [
+                'rel'  => 'shortcut icon',
+                'type' => 'image/png',
+                'href' => '/assets/img/favicon.png',
+            ]
+        )?>
+    </head>
     <body class="app">
         <!-- ======= Header ======= -->
         <header id="header" class="fixed-top ">

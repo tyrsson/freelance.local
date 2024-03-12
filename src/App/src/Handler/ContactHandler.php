@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Handler;
 
+use Laminas\Diactoros\Response\TextResponse;
+use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Laminas\Diactoros\Response\HtmlResponse;
-use Mezzio\Template\TemplateRendererInterface;
 
 class ContactHandler implements RequestHandlerInterface
 {
@@ -22,13 +22,39 @@ class ContactHandler implements RequestHandlerInterface
         $this->renderer = $renderer;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        // Do some work...
-        // Render and return a response:
-        return new HtmlResponse($this->renderer->render(
-            'page::contact',
-            [] // parameters to pass to template
-        ));
+        /**
+         * Please note
+         *
+         * General:
+         * By the time execution gets here we have either already sent the email
+         * since validation passed or we passed in the error messages from the
+         * validators so that they can be passed through to the template file.
+         * I handled it that way to keep the Handler very light and so it
+         * only has to handle the response. The ContactMiddleware handles
+         * the heavy lifting of sending the email and performing validation
+         *
+         * On validation failure:
+         * We passed the validator errors via the request so that we can pass them to
+         * a .phtml file for rendering and we send it back in the response
+         * The AjaxMiddleware handles disabling the layout for the response
+         *
+         * On Validation success:
+         * We send a text response of OK since that is what the client side js is looking for
+         */
+        if (! $request->getAttribute('emailSent', false)) {
+            return new TextResponse(
+                $this->renderer->render(
+                    'partial::formErrors',
+                    [
+                        'errors' => $request->getAttribute('formError')
+                    ],
+                ),
+            );
+        }
+        return new TextResponse(
+            'OK'
+        );
     }
 }

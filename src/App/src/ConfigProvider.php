@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App;
 
+use Laminas\Filter;
+use Laminas\Validator;
 use Laminas\View\Model\ModelInterface;
 
 /**
@@ -29,6 +31,10 @@ class ConfigProvider
              * It can be added to any ConfigProvider to aggregate configuration to the view helpers
              */
             'view_helper_config' => $this->getViewHelperConfig(),
+            /**
+             * This key is the one that is required by the Abstract filter factory
+             */
+            'input_filter_specs' => $this->getInputFilterSpecs(),
         ];
     }
 
@@ -45,6 +51,7 @@ class ConfigProvider
                 Handler\HomePageHandler::class => Handler\HomePageHandlerFactory::class,
                 // This is most likely the most important Factory in the application currently
                 ModelInterface::class          => Service\LayoutFactory::class,
+                Middleware\AjaxRequestMiddleware::class => Middleware\AjaxRequestMiddlewareFactory::class,
             ],
         ];
     }
@@ -85,6 +92,12 @@ class ConfigProvider
                 'enableFooterLinks'       => false,
                 'enableDropDownMenu'      => false,
                 'enableFooterContactInfo' => true,
+                'contact' => [
+                    'enableMap' => false,
+                    'location'  => 'A108 Adam Street, New York, NY 535022',
+                    'email'     => 'info@example.com',
+                    'phone'     => '+1 5589 55488 55s',
+                ],
             ],
         ];
     }
@@ -93,6 +106,74 @@ class ConfigProvider
     {
         return [
             'doctype' => 'HTML5', // This is what allows the doctype helper to work in the layout
+        ];
+    }
+
+    public function getInputFilterSpecs(): array
+    {
+        /**
+         * This is the "spec" for the creating the InputFilter. If you are reading critically
+         * your first question really should be... If this is an InputFilter why is it handling
+         * validation as well... Well, honestly I cant answer that, but its very nice that it does
+         * Basically, each of the following arrays will map to the form elements in the contact form.
+         * We have fields (elements for name, email, subject, message). So in the spec 'name' points to the
+         * field/element name. This is so when we call setData on the InputFilter and pass it the posted
+         * data it can bind each spec to its "input". As you can see each filter and validator can accept
+         * its own config etc by passing it in the correct way in the spec. Its also important to note
+         * that filters run in the order in which they are attached. You will have to look up which
+         * filters/validators support which options.
+         */
+        return [
+            // This key is what is used to pull the InputFilter from the plugin manager
+            'contact' => [
+                // Start the spec for the "name" element in the form
+                [
+                    'name'     => 'name',
+                    'required' => true,
+                    'filters'  => [
+                        ['name' => Filter\StripTags::class],
+                        ['name' => Filter\StringTrim::class],
+                    ],
+                ],
+                // end name
+                // start email
+                [
+                    'name'     => 'email',
+                    'required' => true,
+                    'filters'  => [
+                        ['name' => Filter\StripTags::class],
+                        ['name' => Filter\StringTrim::class],
+                    ],
+                    'validators' => [
+                        [
+                            'name'    => Validator\StringLength::class,
+                            'options' => [
+                                'encoding' => 'UTF-8',
+                                'min'      => 1,
+                                'max'      => 320, // true, we may never see an email this length, but they are still valid
+                            ],
+                        ],
+                        // @see EmailAddress for $options
+                        ['name' => Validator\EmailAddress::class],
+                    ],
+                ],
+                [
+                    'name'     => 'subject',
+                    'required' => true,
+                    'filters'  => [
+                        ['name' => Filter\StripTags::class],
+                        ['name' => Filter\StringTrim::class],
+                    ],
+                ],
+                [
+                    'name'     => 'message',
+                    'required' => true,
+                    'filters'  => [
+                        ['name' => Filter\StripTags::class],
+                        ['name' => Filter\StringTrim::class],
+                    ],
+                ],
+            ],
         ];
     }
 }

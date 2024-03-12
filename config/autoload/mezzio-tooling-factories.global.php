@@ -14,6 +14,7 @@ return [
     'dependencies' => [
         'factories' => [
             App\Handler\ContactHandler::class => App\Handler\ContactHandlerFactory::class,
+            App\Middleware\ContactMiddleware::class => App\Middleware\ContactMiddlewareFactory::class,
         ],
     ],
 ];
