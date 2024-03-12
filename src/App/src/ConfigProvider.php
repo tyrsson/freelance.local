@@ -122,9 +122,9 @@ class ConfigProvider
             'contact' => [
                 // Start the spec for the "name" element in the form
                 [
-                    'name' => 'name',
-                    'required'   => true,
-                    'filters'    => [
+                    'name'     => 'name',
+                    'required' => true,
+                    'filters'  => [
                         ['name' => Filter\StripTags::class],
                         ['name' => Filter\StringTrim::class],
                     ],
