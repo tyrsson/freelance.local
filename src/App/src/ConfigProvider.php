@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App;
 
+use Laminas\Filter;
+use Laminas\Validator;
 use Laminas\View\Model\ModelInterface;
 
 /**
@@ -29,6 +31,7 @@ class ConfigProvider
              * It can be added to any ConfigProvider to aggregate configuration to the view helpers
              */
             'view_helper_config' => $this->getViewHelperConfig(),
+            'input_filter_specs' => $this->getInputFilterSpecs(),
         ];
     }
 
@@ -45,6 +48,7 @@ class ConfigProvider
                 Handler\HomePageHandler::class => Handler\HomePageHandlerFactory::class,
                 // This is most likely the most important Factory in the application currently
                 ModelInterface::class          => Service\LayoutFactory::class,
+                Middleware\AjaxRequestMiddleware::class => Middleware\AjaxRequestMiddlewareFactory::class,
             ],
         ];
     }
@@ -93,6 +97,58 @@ class ConfigProvider
     {
         return [
             'doctype' => 'HTML5', // This is what allows the doctype helper to work in the layout
+        ];
+    }
+
+    public function getInputFilterSpecs(): array
+    {
+        return [
+            'contact' => [
+                [
+                    'name' => 'name',
+                    'required'   => true,
+                    'filters'    => [
+                        ['name' => Filter\StripTags::class],
+                        ['name' => Filter\StringTrim::class],
+                    ],
+                ],
+                [
+                    'name' => 'email',
+                    'required'   => true,
+                    'filters'    => [
+                        ['name' => Filter\StripTags::class],
+                        ['name' => Filter\StringTrim::class],
+                    ],
+                    'validators' => [
+                        [
+                            'name'    => Validator\StringLength::class,
+                            'options' => [
+                                'encoding' => 'UTF-8',
+                                'min'      => 1,
+                                'max'      => 320, // true, we may never see an email this length, but they are still valid
+                            ],
+                        ],
+                        // @see EmailAddress for $options
+                        ['name' => Validator\EmailAddress::class],
+                    ],
+                ],
+                [
+                    'name' => 'subject',
+                    'required'   => true,
+                    'filters'    => [
+                        ['name' => Filter\StripTags::class],
+                        ['name' => Filter\StringTrim::class],
+                    ],
+                ],
+                [
+                    'name' => 'message',
+                    'required'   => true,
+                    'filters'    => [
+                        ['name' => Filter\StripTags::class],
+                        ['name' => Filter\StringTrim::class],
+                    ],
+                ],
+            ],
         ];
     }
 }

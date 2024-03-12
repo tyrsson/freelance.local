@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Mezzio\Application;
+use Mezzio\Helper\BodyParams\BodyParamsMiddleware;
 use Mezzio\MiddlewareFactory;
 use Psr\Container\ContainerInterface;
 
@@ -39,6 +40,26 @@ use Psr\Container\ContainerInterface;
 
 return static function (Application $app, MiddlewareFactory $factory, ContainerInterface $container): void {
     $app->get('/', App\Handler\HomePageHandler::class, 'home');
-    $app->route('/contact', App\Handler\ContactHandler::class, ['GET', 'POST'], 'contact');
+    /**
+     * This sets up a middleware pipeline and runs the middleware
+     * and handlers in the order in which they are registered ie, their order in the array.
+     * Only get and post request are valid, anything else will prompt an error.
+     * Since this pipeline is path segregated this execution is limited to
+     * /contact none of these middleware/handlers will run for anyother path
+     */
+    $app->route(
+        '/contact',
+        [
+            BodyParamsMiddleware::class,
+            App\Middleware\AjaxRequestMiddleware::class,
+            App\Middleware\ContactMiddleware::class,
+            App\Handler\ContactHandler::class
+        ],
+        [
+            'GET',
+            'POST',
+        ],
+        'contact'
+    );
     $app->get('/api/ping', App\Handler\PingHandler::class, 'api.ping');
 };
