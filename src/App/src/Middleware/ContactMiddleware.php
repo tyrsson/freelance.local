@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use Fig\Http\Message\RequestMethodInterface;
+use Fig\Http\Message\RequestMethodInterface as Http;
 use Laminas\InputFilter\InputFilterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -20,7 +20,7 @@ class ContactMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if (RequestMethodInterface::METHOD_POST === $request->getMethod()) {
+        if (Http::METHOD_POST === $request->getMethod()) {
             $post = $request->getParsedBody();
             $this->inputFilter->setData($post);
             if ($this->inputFilter->isValid()) {

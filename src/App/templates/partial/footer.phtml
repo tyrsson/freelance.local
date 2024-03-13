@@ -6,8 +6,8 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-6">
-            <h4>Join Our Newsletter</h4>
-            <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
+            <h4><?=$this->newsLetterHeading ?? '';?></h4>
+            <p><?=$this->newsLetterBlurb ?? '';?></p>
             <form action="" method="post">
               <input type="email" name="email"><input type="submit" value="Subscribe">
             </form>
@@ -35,11 +35,9 @@
             if($this->enableFooterContactInfo):
                 ?>
             <p>
-              A108 Adam Street <br>
-              New York, NY 535022<br>
-              United States <br><br>
-              <strong>Phone:</strong> +1 5589 55488 55<br>
-              <strong>Email:</strong> info@example.com<br>
+              <?=$this->location;?><br><br>
+              <strong>Phone:</strong> <?=$this->phone;?><br>
+              <strong>Email:</strong> <?=$this->email;?><br>
             </p>
             <?php
             endif;
