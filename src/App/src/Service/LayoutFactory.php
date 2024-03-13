@@ -8,6 +8,7 @@ use Laminas\View\Model\ModelInterface;
 use Laminas\View\Model\ViewModel;
 use Psr\Container\ContainerInterface;
 
+use function array_merge;
 use function basename;
 use function in_array;
 use function glob;
@@ -41,16 +42,15 @@ final class LayoutFactory
 
         $hero = new ViewModel();
         $hero->setTemplate('partial::hero');
+        if (isset($settings['hero'])) {
+            $hero->setVariables($settings['hero']);
+        }
 
         $footer = new ViewModel();
         $footer->setTemplate('partial::footer');
-        $footer->setVariables(
-            [
-                'siteName' => $config['templates']['defaultParams']['siteName'],
-                'enableNewsletter' => $settings['enableNewsletter'],
-                'enableFooterLinks' => $settings['enableFooterLinks'],
-            ]
-        );
+        $footerVars = array_merge($settings['footer'], $settings['contact']);
+        $footer->setVariables($footerVars);
+        $footer->setVariable('siteName', $config['templates']['defaultParams']['siteName'],);
         // assign layout properties that are models but not pages ;)
         $layout->setVariables(
             [
@@ -74,7 +74,7 @@ final class LayoutFactory
                         $child         = new ViewModel();
                         $child->setTemplate('page::' . $template);
                         if (isset($settings[$template])) {
-                            // This tricky allows us to have a ['settings'][$template] and automatically inject them
+                            // This trickery allows us to have a ['settings'][$template] and automatically inject them
                             $child->setVariables($settings[$template]);
                         }
                         $layout->setVariable($template, $child);

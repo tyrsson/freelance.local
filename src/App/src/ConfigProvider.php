@@ -87,16 +87,25 @@ class ConfigProvider
             ],
             // bool true|false
             'settings' => [
-                'multiPage'               => false,
-                'enableNewsletter'        => false,
-                'enableFooterLinks'       => false,
-                'enableDropDownMenu'      => false,
-                'enableFooterContactInfo' => true,
+                'multiPage'          => false,
+                'enableDropDownMenu' => false,
                 'contact' => [
-                    'enableMap' => false,
-                    'location'  => 'A108 Adam Street, New York, NY 535022',
-                    'email'     => 'info@example.com',
-                    'phone'     => '+1 5589 55488 55s',
+                    'enableMap' => false, // bool true|false
+                    'location'  => null, // string|null
+                    'email'     => 'info@example.com', // string|null
+                    'phone'     => '+1 5589 55488 55s', // string|null
+                    'contactBlurb' => 'This is your contact blurb.', // string|null
+                ],
+                'hero'    => [
+                    'heroHeading' => 'Better Solutions For Your Business', // string|null
+                    'blurb'       => 'Hire us we\'re AWESOMESAUCE', // string|null
+                ],
+                'footer' => [
+                    'enableFooterLinks'       => true, // bool true|false
+                    'enableNewsletter'        => true, // bool true|false
+                    'enableFooterContactInfo' => true, // bool true|false
+                    'newsLetterHeading'       => 'Join Our Newsletter', // string|null
+                    'newsLetterBlurb'         => 'Tamen quem nulla quae legam multos aute sint culpa legam noster magna', // string|null
                 ],
             ],
         ];
