@@ -90,15 +90,18 @@ class ConfigProvider
                 'multiPage'          => false,
                 'enableDropDownMenu' => false,
                 'contact' => [
-                    'enableMap' => false, // bool true|false
-                    'location'  => null, // string|null
-                    'email'     => 'info@example.com', // string|null
-                    'phone'     => '+1 5589 55488 55s', // string|null
+                    'enableMap'    => true, // bool true|false
+                    'location'     => null, // string|null
+                    'email'        => 'info@example.com', // string|null
+                    'phone'        => '+1 5589 55488 55s', // string|null
                     'contactBlurb' => 'This is your contact blurb.', // string|null
                 ],
                 'hero'    => [
-                    'heroHeading' => 'Better Solutions For Your Business', // string|null
-                    'blurb'       => 'Hire us we\'re AWESOMESAUCE', // string|null
+                    'heroHeading'     => 'Better Solutions For Your Business', // string|null
+                    'blurb'           => 'Hire us we\'re AWESOMESAUCE', // string|null
+                    'enableHeroVideo' => false, // bool true|false
+                    'heroVideoLink'   => 'https://www.youtube.com/watch?v=jDDaplaOz7Q', //string|null
+                    'img'             => 'hero-img.png', // string|null
                 ],
                 'footer' => [
                     'enableFooterLinks'       => true, // bool true|false
@@ -106,6 +109,85 @@ class ConfigProvider
                     'enableFooterContactInfo' => true, // bool true|false
                     'newsLetterHeading'       => 'Join Our Newsletter', // string|null
                     'newsLetterBlurb'         => 'Tamen quem nulla quae legam multos aute sint culpa legam noster magna', // string|null
+                ],
+                'faq' => [
+                    'faqHeading' => 'FREQUENTLY ASKED QUESTIONS', // string|null
+                    'faqBlurb'   => 'Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.', // string|null
+                    'data' => [
+                        [
+                            'question' => 'Non consectetur a erat nam at lectus urna duis?',
+                            'answer'   => 'Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.',
+                        ],
+                        [
+                            'question' => 'Feugiat scelerisque varius morbi enim nunc?',
+                            'answer'   => 'Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.',
+                        ],
+                        [
+                            'question' => 'Dolor sit amet consectetur adipiscing elit?',
+                            'answer'   => 'Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis',
+                        ],
+                        [
+                            'question' => 'Tempus quam pellentesque nec nam aliquam sem et tortor consequat?',
+                            'answer'   => 'Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in.',
+                        ],
+                        [
+                            'question' => 'Tortor vitae purus faucibus ornare. Varius vel pharetra vel turpis nunc eget lorem dolor?',
+                            'answer'   => 'Laoreet sit amet cursus sit amet dictum sit amet justo. Mauris vitae ultricies leo integer malesuada nunc vel. Tincidunt eget nullam non nisi est sit amet. Turpis nunc eget lorem dolor sed. Ut venenatis tellus in metus vulputate eu scelerisque.',
+                        ],
+                    ],
+                ],
+                'services' => [
+                    'serviceHeading' => 'Services', // string|null
+                    'serviceBlurb'   => 'Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.',
+                    'data' => [
+                        [
+                            'icon'    => 'bx bxl-dribbble', // string|null
+                            'name'    => 'Lorem Ipsum', // string|null
+                            'link'    => null, // string|null
+                            'content' => 'Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi',
+                        ],
+                        [
+                            'icon'    => 'bx bx-file', // string|null
+                            'name'    => 'Sed ut perspici', // string|null
+                            'link'    => null, // string|null
+                            'content' => 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore', //string|null
+                        ],
+                        [
+                            'icon'    => 'bx bx-tachometer', // string|null
+                            'name'    => 'Magni Dolores', // string|null
+                            'link'    => null, // string|null
+                            'content' => 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia', //string|null
+                        ],
+                        [
+                            'icon'    => 'bx bx-layer', // string|null
+                            'name'    => 'Nemo Enim', // string|null
+                            'link'    => null, // string|null
+                            'content' => 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis', //string|null
+                        ],
+                    ],
+                ],
+                'skills' => [
+                    'img'          => 'skills.png', // string|null
+                    'skillHeading' => 'Our Skillz', // string|null
+                    'skillBlurb'   => 'These are the skillz we use most.', // string|null
+                    'data' => [
+                        [
+                            'name'       => 'HTML', // string|null
+                            'percentage' => '100', // string|null without %
+                        ],
+                        [
+                            'name'       => 'PHP', // string|null
+                            'percentage' => '100', // string|null without %
+                        ],
+                        [
+                            'name'       => 'CSS', // string|null
+                            'percentage' => '90', // string|null without %
+                        ],
+                        [
+                            'name'       => 'JAVASCRIPT', // string|null
+                            'percentage' => '75', // string|null without %
+                        ],
+                    ],
                 ],
             ],
         ];
@@ -121,9 +203,9 @@ class ConfigProvider
     public function getInputFilterSpecs(): array
     {
         /**
-         * This is the "spec" for the creating the InputFilter. If you are reading critically
+         * This is the "spec" for creating the InputFilter. If you are reading critically
          * your first question really should be... If this is an InputFilter why is it handling
-         * validation as well... Well, honestly I cant answer that, but its very nice that it does
+         * validation as well... Well, honestly I cant answer that, but its very nice that it does.
          * Basically, each of the following arrays will map to the form elements in the contact form.
          * We have fields (elements for name, email, subject, message). So in the spec 'name' points to the
          * field/element name. This is so when we call setData on the InputFilter and pass it the posted
@@ -135,7 +217,9 @@ class ConfigProvider
         return [
             // This key is what is used to pull the InputFilter from the plugin manager
             'contact' => [
-                // Start the spec for the "name" element in the form
+                /**
+                 * Start the spec for the "name" element in the <form action="" class=""></form>
+                 */
                 [
                     'name'     => 'name',
                     'required' => true,
