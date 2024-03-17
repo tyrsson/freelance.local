@@ -2,3 +2,6 @@
 !cache
 !cache/.gitkeep
 !.gitignore
+!storage
+!storage/*.php
+storage/auth.php

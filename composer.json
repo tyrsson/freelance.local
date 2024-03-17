@@ -45,9 +45,11 @@
         "laminas/laminas-servicemanager": "^3.22",
         "laminas/laminas-stdlib": "^3.6",
         "mezzio/mezzio": "^3.7",
+        "mezzio/mezzio-authentication-session": "^1.9",
         "mezzio/mezzio-fastroute": "^3.11.0",
         "mezzio/mezzio-helpers": "^5.7",
         "mezzio/mezzio-laminasviewrenderer": "^2.15",
+        "mezzio/mezzio-session-ext": "^1.19",
         "webinertia/limatus": "^0.0.14"
     },
     "require-dev": {

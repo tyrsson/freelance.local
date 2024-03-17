@@ -25,8 +25,9 @@ final class LayoutFactory
     public function __invoke(ContainerInterface $container): ModelInterface
     {
         $config   = $container->get('config');
-        $settings = $config['templates']['settings'];
-        $layout   = new ViewModel($config['templates']['defaultParams']);
+        $settings = $config['settings'];
+        $data     = $config['data'];
+        $layout   = new ViewModel($settings);
         $layout->setTemplate('layout::default');
         // add the settings
         $layout->setVariable('settings', $settings);
@@ -35,29 +36,29 @@ final class LayoutFactory
         $nav->setTemplate('partial::multi-page-nav');
         $nav->setVariables(
             [
-                'activeLinks' => $config['templates']['enabledPages'], // creates a activeLink property in the scope of the nav.phtml tmpl
+                'activeLinks' => $settings['enabledPages'], // creates a activeLink property in the scope of the nav.phtml tmpl
                 'enableDropDownMenu' => $settings['enableDropDownMenu'],
             ]
         );
 
         $hero = new ViewModel();
         $hero->setTemplate('partial::hero');
-        if (isset($settings['hero'])) {
-            $hero->setVariables($settings['hero']);
+        if (isset($data['hero'])) {
+            $hero->setVariables($data['hero']);
         }
 
         $footer = new ViewModel();
         $footer->setTemplate('partial::footer');
-        $footerVars = array_merge($settings['footer'], $settings['contact']);
+        $footerVars = array_merge($data['footer'], $data['contact']);
         $footer->setVariables($footerVars);
-        $footer->setVariable('siteName', $config['templates']['defaultParams']['siteName'],);
+        $footer->setVariable('siteName', $settings['siteName']);
         // assign layout properties that are models but not pages ;)
         $layout->setVariables(
             [
                 'nav'    => $nav,
                 'hero'   => $hero,
                 'footer' => $footer,
-                'enabledPages' => $config['templates']['enabledPages'],
+                'enabledPages' => $settings['enabledPages'],
             ]
         );
 
@@ -66,16 +67,16 @@ final class LayoutFactory
             $nav->setTemplate('partial::single-page-nav');
             $path  = $config['templates']['paths']['page'][0];
             $files = glob($path . '/*.phtml');
-            if (count($files) >= 1 && count($config['templates']['enabledPages']) >= 1) {
+            if (count($files) >= 1 && count($settings['enabledPages']) >= 1) {
                 foreach ($files as $file) {
                     $template = basename($file, '.phtml');
-                    if (in_array($template, $config['templates']['enabledPages'])) {
+                    if (in_array($template, $settings['enabledPages'])) {
                         $activeLinks[] = $template;
                         $child         = new ViewModel();
                         $child->setTemplate('page::' . $template);
-                        if (isset($settings[$template])) {
+                        if (isset($data[$template])) {
                             // This trickery allows us to have a ['settings'][$template] and automatically inject them
-                            $child->setVariables($settings[$template]);
+                            $child->setVariables($data[$template]);
                         }
                         $layout->setVariable($template, $child);
                     }

@@ -7,6 +7,9 @@ namespace App;
 use Laminas\Filter;
 use Laminas\Validator;
 use Laminas\View\Model\ModelInterface;
+use Mezzio\Authentication\AuthenticationInterface;
+use Mezzio\Authentication\Session\PhpSession;
+use Mezzio\Authentication\UserRepositoryInterface;
 
 /**
  * The configuration provider for the App module
@@ -24,8 +27,9 @@ class ConfigProvider
     public function __invoke(): array
     {
         return [
-            'dependencies'       => $this->getDependencies(),
-            'templates'          => $this->getTemplates(),
+            'authentication' => $this->getAuthenticationConfig(),
+            'dependencies'   => $this->getDependencies(),
+            'templates'      => $this->getTemplates(),
             /**
              * This key is the key you will find targeted in the doctype helper factory.
              * It can be added to any ConfigProvider to aggregate configuration to the view helpers
@@ -38,12 +42,23 @@ class ConfigProvider
         ];
     }
 
+    public function getAuthenticationConfig(): array
+    {
+        return [
+            'redirect' => '/login',
+        ];
+    }
+
     /**
      * Returns the container dependencies
      */
     public function getDependencies(): array
     {
         return [
+            'aliases' => [
+                AuthenticationInterface::class => PhpSession::class,
+                UserRepositoryInterface::class => UserRepository\PhpArray::class,
+            ],
             'invokables' => [
                 Handler\PingHandler::class => Handler\PingHandler::class,
             ],
@@ -62,17 +77,6 @@ class ConfigProvider
     public function getTemplates(): array
     {
         return [
-            'defaultParams' => [
-                // This is used anywhere the siteName template property is called
-                'siteName' => 'FreeLancersRus',
-            ],
-            /**
-             * These are rendered as they are listed here.
-             * about, clients, contact, cta, faq, portfolio, pricing, services, skills, team, why
-             */
-            'enabledPages' => [
-                'about', 'services', 'faq', 'skills', 'contact',
-            ],
             'paths' => [
                 /**
                  * these are "namespaced", the key is the "namespace" in the form of 'app::templateName'.
@@ -84,111 +88,6 @@ class ConfigProvider
                 'layout'  => [__DIR__ . '/../templates/layout'],
                 'page'    => [__DIR__ . '/../templates/page'],
                 'partial' => [__DIR__ . '/../templates/partial'],
-            ],
-            // bool true|false
-            'settings' => [
-                'multiPage'          => false,
-                'enableDropDownMenu' => false,
-                'contact' => [
-                    'enableMap'    => true, // bool true|false
-                    'location'     => null, // string|null
-                    'email'        => 'info@example.com', // string|null
-                    'phone'        => '+1 5589 55488 55s', // string|null
-                    'contactBlurb' => 'This is your contact blurb.', // string|null
-                ],
-                'hero'    => [
-                    'heroHeading'     => 'Better Solutions For Your Business', // string|null
-                    'blurb'           => 'Hire us we\'re AWESOMESAUCE', // string|null
-                    'enableHeroVideo' => false, // bool true|false
-                    'heroVideoLink'   => 'https://www.youtube.com/watch?v=jDDaplaOz7Q', //string|null
-                    'img'             => 'hero-img.png', // string|null
-                ],
-                'footer' => [
-                    'enableFooterLinks'       => true, // bool true|false
-                    'enableNewsletter'        => true, // bool true|false
-                    'enableFooterContactInfo' => true, // bool true|false
-                    'newsLetterHeading'       => 'Join Our Newsletter', // string|null
-                    'newsLetterBlurb'         => 'Tamen quem nulla quae legam multos aute sint culpa legam noster magna', // string|null
-                ],
-                'faq' => [
-                    'faqHeading' => 'FREQUENTLY ASKED QUESTIONS', // string|null
-                    'faqBlurb'   => 'Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.', // string|null
-                    'data' => [
-                        [
-                            'question' => 'Non consectetur a erat nam at lectus urna duis?',
-                            'answer'   => 'Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.',
-                        ],
-                        [
-                            'question' => 'Feugiat scelerisque varius morbi enim nunc?',
-                            'answer'   => 'Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.',
-                        ],
-                        [
-                            'question' => 'Dolor sit amet consectetur adipiscing elit?',
-                            'answer'   => 'Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis',
-                        ],
-                        [
-                            'question' => 'Tempus quam pellentesque nec nam aliquam sem et tortor consequat?',
-                            'answer'   => 'Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in.',
-                        ],
-                        [
-                            'question' => 'Tortor vitae purus faucibus ornare. Varius vel pharetra vel turpis nunc eget lorem dolor?',
-                            'answer'   => 'Laoreet sit amet cursus sit amet dictum sit amet justo. Mauris vitae ultricies leo integer malesuada nunc vel. Tincidunt eget nullam non nisi est sit amet. Turpis nunc eget lorem dolor sed. Ut venenatis tellus in metus vulputate eu scelerisque.',
-                        ],
-                    ],
-                ],
-                'services' => [
-                    'serviceHeading' => 'Services', // string|null
-                    'serviceBlurb'   => 'Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.',
-                    'data' => [
-                        [
-                            'icon'    => 'bx bxl-dribbble', // string|null
-                            'name'    => 'Lorem Ipsum', // string|null
-                            'link'    => null, // string|null
-                            'content' => 'Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi',
-                        ],
-                        [
-                            'icon'    => 'bx bx-file', // string|null
-                            'name'    => 'Sed ut perspici', // string|null
-                            'link'    => null, // string|null
-                            'content' => 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore', //string|null
-                        ],
-                        [
-                            'icon'    => 'bx bx-tachometer', // string|null
-                            'name'    => 'Magni Dolores', // string|null
-                            'link'    => null, // string|null
-                            'content' => 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia', //string|null
-                        ],
-                        [
-                            'icon'    => 'bx bx-layer', // string|null
-                            'name'    => 'Nemo Enim', // string|null
-                            'link'    => null, // string|null
-                            'content' => 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis', //string|null
-                        ],
-                    ],
-                ],
-                'skills' => [
-                    'img'          => 'skills.png', // string|null
-                    'skillHeading' => 'Our Skillz', // string|null
-                    'skillBlurb'   => 'These are the skillz we use most.', // string|null
-                    'data' => [
-                        [
-                            'name'       => 'HTML', // string|null
-                            'percentage' => '100', // string|null without %
-                        ],
-                        [
-                            'name'       => 'PHP', // string|null
-                            'percentage' => '100', // string|null without %
-                        ],
-                        [
-                            'name'       => 'CSS', // string|null
-                            'percentage' => '90', // string|null without %
-                        ],
-                        [
-                            'name'       => 'JAVASCRIPT', // string|null
-                            'percentage' => '75', // string|null without %
-                        ],
-                    ],
-                ],
             ],
         ];
     }

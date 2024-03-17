@@ -14,6 +14,10 @@ $cacheConfig = [
 ];
 
 $aggregator = new ConfigAggregator([
+    \Mezzio\Authentication\Session\ConfigProvider::class,
+    \Mezzio\Authentication\ConfigProvider::class,
+    \Mezzio\Session\Ext\ConfigProvider::class,
+    \Mezzio\Session\ConfigProvider::class,
     \Laminas\Form\ConfigProvider::class,
     \Limatus\ConfigProvider::class,
     \Laminas\Navigation\ConfigProvider::class,
@@ -41,6 +45,8 @@ $aggregator = new ConfigAggregator([
         : function (): array {
             return [];
         },
+
+    new PhpFileProvider(realpath(__DIR__ . '/../') . '/data/storage/{,*}.php'),
 
     // Default App module config
     App\ConfigProvider::class,
