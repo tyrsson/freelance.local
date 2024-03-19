@@ -24,6 +24,9 @@ class HomePageHandlerFactory
             : null;
         assert($template instanceof TemplateRendererInterface || null === $template);
 
-        return new HomePageHandler($container->get(ModelInterface::class), $template);
+        return new HomePageHandler(
+            $template,
+            $container->get('config')
+        );
     }
 }

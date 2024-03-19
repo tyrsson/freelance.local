@@ -2,6 +2,13 @@
 return [
     'data' => [
         'contact' => [
+            'elementMap' => [
+                'enableMap' => 'CheckBox',
+                'location'  => 'Text',
+                'email'     => 'Text',
+                'phone'     => 'Text',
+                'contactBlurb' => 'TextArea',
+            ],
             'enableMap'    => true, // bool true|false
             'location'     => null, // string|null
             'email'        => 'info@example.com', // string|null

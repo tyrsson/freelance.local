@@ -15,6 +15,7 @@ return [
         'factories' => [
             App\Handler\ContactHandler::class => App\Handler\ContactHandlerFactory::class,
             App\Middleware\ContactMiddleware::class => App\Middleware\ContactMiddlewareFactory::class,
+            App\Middleware\TemplateMiddleware::class => App\Middleware\TemplateMiddlewareFactory::class,
         ],
     ],
 ];

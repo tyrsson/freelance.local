@@ -1,10 +1,14 @@
 <?php
 return [
     'settings' => [
-        'siteName' => 'FreeLancersRus',
-        'multiPage'          => false,
+        'siteName' => 'Axleus Technologies',
+        'singlePage'         => true,
         'enableDropDownMenu' => false,
-        'enabledPages' => [
+        'enableLogin'        => true,
+        'showInMenu' => [ // todo: build menu from this
+            'about', 'services', 'faq', 'skills', 'contact', 'login'
+        ],
+        'showOnHome' => [ // show pages from this on home page
             'about', 'services', 'faq', 'skills', 'contact',
         ],
     ],

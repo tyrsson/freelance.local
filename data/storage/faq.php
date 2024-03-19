@@ -2,6 +2,14 @@
 return [
     'data' => [
         'faq' => [
+            'elementMap' => [
+                'faqHeading' => 'Text',
+                'faqBlurb'   => 'TextArea',
+                'data' => [
+                    'question' => 'TextArea',
+                    'answer'   => 'TextArea',
+                ],
+            ],
             'faqHeading' => 'FREQUENTLY ASKED QUESTIONS', // string|null
             'faqBlurb'   => 'Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.', // string|null
             'data' => [

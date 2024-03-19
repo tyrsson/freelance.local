@@ -1,0 +1,22 @@
+<?php
+
+declare(strict_types=1);
+
+$this->headTitle(ucfirst($this->currentRoute));
+?>
+<section class="inner-page">
+    <div class="container">
+        <div class="row align-items-center">
+        <?php
+            if (isset($this->error)) {
+                // show an error
+            }
+
+            if (isset($this->form)) {
+                $this->form->addSubmit(priority: -1, showText: 'Login');
+                echo $this->form($this->form);
+            }
+        ?>
+        </div>
+    </div>
+</section>

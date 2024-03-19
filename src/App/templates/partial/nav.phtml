@@ -5,11 +5,15 @@ declare(strict_types=1);
 ?>
 <nav id="navbar" class="navbar">
     <ul>
-        <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+        <li><a class="<?=$this->currentRoute === 'home' ? 'nav-link active' : 'nav-link';?>" href="<?=$this->url('home');?>">Home</a></li>
         <?php
         foreach ($this->activeLinks as $link):
         ?>
-            <li><a class="nav-link scrollto" href="#<?=$link?>"><?=ucfirst($link)?></a></li>
+            <?php if (in_array($link, $this->showOnHome)): ?>
+                <li><a class="<?=$link === $this->currentRoute ? 'nav-link scrollto active' : 'nav-link scrollto';?>" href="#<?=$link;?>"><?=ucfirst($link);?></a></li>
+            <?php else: ?>
+                <li><a class="<?=$link === $this->currentRoute ? 'nav-link active' : 'nav-link';?>" href="/<?=$link;?>"><?=ucfirst($link);?></a></li>
+            <?php endif; ?>
         <?php
         endforeach;
         ?>

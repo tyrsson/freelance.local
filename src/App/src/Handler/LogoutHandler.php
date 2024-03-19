@@ -2,27 +2,20 @@
 
 declare(strict_types=1);
 
-namespace UserManager\Handler;
+namespace App\Handler;
 
-use Axleus\Authorization\ResourceInterfaceTrait;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\Response\RedirectResponse;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use League\Tactician\CommandBus;
 use Mezzio\Session\LazySession;
 use Mezzio\Session\SessionMiddleware;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use UserManager\Auth\LogoutCommand;
 
-class LogoutHandler implements RequestHandlerInterface, ResourceInterface
+class LogoutHandler implements RequestHandlerInterface
 {
-    use ResourceInterfaceTrait;
-
     public function __construct(
-        private CommandBus $commandBus,
         private TemplateRendererInterface $renderer
     ) {
     }
@@ -32,7 +25,10 @@ class LogoutHandler implements RequestHandlerInterface, ResourceInterface
         /** @var LazySession */
         $session = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE);
         try {
-            $this->commandBus->handle(new LogoutCommand($session));
+            if ($session) {
+                $session->clear();
+                $session->regenerate();
+            }
             return new RedirectResponse('/');
         } catch (\Throwable $th) {
             //throw $th;

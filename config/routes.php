@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Mezzio\Application;
+use Mezzio\Authentication\AuthenticationMiddleware;
 use Mezzio\Helper\BodyParams\BodyParamsMiddleware;
 use Mezzio\MiddlewareFactory;
 use Psr\Container\ContainerInterface;
@@ -51,7 +52,6 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         '/contact',
         [
             BodyParamsMiddleware::class,
-            App\Middleware\AjaxRequestMiddleware::class,
             App\Middleware\ContactMiddleware::class,
             App\Handler\ContactHandler::class
         ],
@@ -60,6 +60,30 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
             'POST',
         ],
         'contact'
+    );
+    $app->route(
+        '/login',
+        [
+            BodyParamsMiddleware::class,
+            App\Handler\LoginHandler::class
+        ],
+        [
+            'GET',
+            'POST',
+        ],
+        'login'
+    );
+    $app->route(
+        '/logout',
+        [
+            BodyParamsMiddleware::class,
+            AuthenticationMiddleware::class,
+            App\Handler\LogoutHandler::class
+        ],
+        [
+            'GET',
+        ],
+        'logout'
     );
     $app->get('/api/ping', App\Handler\PingHandler::class, 'api.ping');
 };

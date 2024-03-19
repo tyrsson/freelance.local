@@ -27,25 +27,19 @@ class ConfigProvider
     public function __invoke(): array
     {
         return [
-            'authentication' => $this->getAuthenticationConfig(),
             'dependencies'   => $this->getDependencies(),
+            // config to use seeding the FormElementManager (ie a plugin manager)
+            'form_elements'  => $this->getFormElementConfig(),
+            /**
+             * This key is the one that is required by the Abstract filter factory
+             */
+            'input_filter_specs' => $this->getInputFilterSpecs(),
             'templates'      => $this->getTemplates(),
             /**
              * This key is the key you will find targeted in the doctype helper factory.
              * It can be added to any ConfigProvider to aggregate configuration to the view helpers
              */
             'view_helper_config' => $this->getViewHelperConfig(),
-            /**
-             * This key is the one that is required by the Abstract filter factory
-             */
-            'input_filter_specs' => $this->getInputFilterSpecs(),
-        ];
-    }
-
-    public function getAuthenticationConfig(): array
-    {
-        return [
-            'redirect' => '/login',
         ];
     }
 
@@ -64,9 +58,21 @@ class ConfigProvider
             ],
             'factories'  => [
                 Handler\HomePageHandler::class => Handler\HomePageHandlerFactory::class,
-                // This is most likely the most important Factory in the application currently
-                ModelInterface::class          => Service\LayoutFactory::class,
+                Handler\LoginHandler::class    => Handler\LoginHandlerFactory::class,
+                Handler\LogoutHandler::class   => Handler\LogoutHandlerFactory::class,
                 Middleware\AjaxRequestMiddleware::class => Middleware\AjaxRequestMiddlewareFactory::class,
+                Middleware\IdentityMiddleware::class    => Middleware\IdentityMiddlewareFactory::class,
+                UserRepository\PhpArray::class          => UserRepository\PhpArrayFactory::class,
+            ],
+        ];
+    }
+
+    public function getFormElementConfig(): array
+    {
+        return [
+            'factories' => [
+                Form\Login::class => Form\LoginFactory::class,
+                Form\Fieldset\LoginFieldset::class => Form\Fieldset\LoginFieldsetFactory::class,
             ],
         ];
     }
