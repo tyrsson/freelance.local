@@ -59,45 +59,45 @@ class LoginFieldset extends Form\Fieldset implements InputFilterProviderInterfac
                 ],
             ],
         ]);
-        // $this->add([
-        //     'name'    => 'login_type',
-        //     'type'    => Checkbox::class,
-        //     'attributes' => [
-        //         'value' => '1',
-        //         /**
-        //          * attribute used in the input class="form-check-input"
-        //          * the example-checkbox is a custom class for css targeting, see the style sheet for the demo site
-        //          */
-        //         'class' => 'form-check-input',
-        //     ],
-        //     'options' => [
-        //         'label' => 'Checkbox',
-        //         'use_hidden_element' => false,
-        //         'checked_value' => '1',
-        //         'unchecked_value' => '0',
-        //         'bootstrap_attributes' => [
-        //             'class' => 'row', // used in the outer most wrapper div for checkbox
-        //         ],
-        //         'label_attributes' => [
-        //             'class' => 'form-check-label',
-        //         ],
-        //         /**
-        //          * used for the div wrapping the input wrapper which is always form-check
-        //          * @see \Bootstrap\Form\View\Helper\FormCheckbox
-        //          */
-        //         'horizontal_attributes' => [
-        //             'class' => 'col-sm-10 offset-sm-2',
-        //         ],
-        //         // we need the label after the input
-        //         'label_options' => [
-        //             'label_position' => 'APPEND',
-        //         ],
-        //         'help'            => 'Testing help text for checkbox\'s',
-        //         'help_attributes' => [
-        //             'class' => 'form-text text-muted col-sm-10 offset-sm-2',
-        //         ],
-        //     ],
-        // ]);
+        $this->add([
+            'name'    => 'session_length_override',
+            'type'    => Checkbox::class,
+            'attributes' => [
+                'value' => '1',
+                /**
+                 * attribute used in the input class="form-check-input"
+                 * the example-checkbox is a custom class for css targeting, see the style sheet for the demo site
+                 */
+                'class' => 'form-check-input',
+            ],
+            'options' => [
+                'label' => 'Stay Logged In?',
+                'use_hidden_element' => false,
+                'checked_value' => '1',
+                'unchecked_value' => '0',
+                'bootstrap_attributes' => [
+                    'class' => 'row', // used in the outer most wrapper div for checkbox
+                ],
+                'label_attributes' => [
+                    'class' => 'form-check-label',
+                ],
+                /**
+                 * used for the div wrapping the input wrapper which is always form-check
+                 * @see \Bootstrap\Form\View\Helper\FormCheckbox
+                 */
+                'horizontal_attributes' => [
+                    'class' => 'col-sm-10 offset-sm-2',
+                ],
+                // we need the label after the input
+                'label_options' => [
+                    'label_position' => 'APPEND',
+                ],
+                'help'            => 'Testing help text for checkbox\'s',
+                'help_attributes' => [
+                    'class' => 'form-text text-muted col-sm-10 offset-sm-2',
+                ],
+            ],
+        ]);
     }
 
     public function getInputFilterSpecification(): array

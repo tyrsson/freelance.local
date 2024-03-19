@@ -78,7 +78,7 @@ final class Login extends Form\Form implements InputFilterProviderInterface
                 ],
             ]);
             $this->add([
-                'name'    => 'login_type',
+                'name'    => 'session_length_override',
                 'type'    => Form\Element\Checkbox::class,
                 'attributes' => [
                     'value' => '1',
@@ -89,7 +89,7 @@ final class Login extends Form\Form implements InputFilterProviderInterface
                     'class' => 'form-check-input',
                 ],
                 'options' => [
-                    'label' => 'Checkbox',
+                    'label' => 'Stay Logged In?',
                     'use_hidden_element' => false,
                     'checked_value' => '1',
                     'unchecked_value' => '0',
