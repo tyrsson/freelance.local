@@ -24,7 +24,7 @@ class LoginFieldset extends Form\Fieldset implements InputFilterProviderInterfac
             'type' => Form\Element\Text::class,
             'attributes' => [
                 'class' => 'form-control custom-class',
-                'placeholder' => 'User Name',
+                //'placeholder' => 'User Name',
             ],
             'options' => [
                 'label' => 'User Name',
@@ -35,7 +35,7 @@ class LoginFieldset extends Form\Fieldset implements InputFilterProviderInterfac
                     'class' => 'row mb-3',
                 ],
                 'horizontal_attributes' => [
-                    'class' => 'col-sm-3',
+                    'class' => 'col-lg-6',
                 ],
             ],
         ]);
@@ -44,7 +44,7 @@ class LoginFieldset extends Form\Fieldset implements InputFilterProviderInterfac
             'type' => Form\Element\Password::class,
             'attributes' => [
                 'class' => 'form-control custom-class',
-                'placeholder' => 'Password',
+                //'placeholder' => 'Password',
             ],
             'options' => [
                 'label' => 'Password',
@@ -55,7 +55,7 @@ class LoginFieldset extends Form\Fieldset implements InputFilterProviderInterfac
                     'class' => 'row mb-3',
                 ],
                 'horizontal_attributes' => [
-                    'class' => 'col-sm-3',
+                    'class' => 'col-lg-6',
                 ],
             ],
         ]);
@@ -63,7 +63,7 @@ class LoginFieldset extends Form\Fieldset implements InputFilterProviderInterfac
             'name'    => 'session_length_override',
             'type'    => Checkbox::class,
             'attributes' => [
-                'value' => '1',
+                'value' => '0',
                 /**
                  * attribute used in the input class="form-check-input"
                  * the example-checkbox is a custom class for css targeting, see the style sheet for the demo site
@@ -92,7 +92,7 @@ class LoginFieldset extends Form\Fieldset implements InputFilterProviderInterfac
                 'label_options' => [
                     'label_position' => 'APPEND',
                 ],
-                'help'            => 'Testing help text for checkbox\'s',
+                'help'            => 'Check this box to stay logged in.',
                 'help_attributes' => [
                     'class' => 'form-text text-muted col-sm-10 offset-sm-2',
                 ],

@@ -6,7 +6,8 @@ $this->headTitle(ucfirst($this->currentRoute));
 ?>
 <section class="inner-page">
     <div class="container">
-        <div class="row align-items-center">
+        <div class="row">
+            <div class="col-lg-9 ms-auto">
         <?php
             if (isset($this->error)) {
                 // show an error
@@ -17,6 +18,7 @@ $this->headTitle(ucfirst($this->currentRoute));
                 echo $this->form($this->form);
             }
         ?>
+            </div>
         </div>
     </div>
 </section>

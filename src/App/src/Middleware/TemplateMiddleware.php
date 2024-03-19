@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Middleware;
 
 use Laminas\View\Model\ViewModel;
+use Mezzio\Authentication\UserInterface;
 use Mezzio\Router\RouteResult;
+use Mezzio\Session\LazySession;
+use Mezzio\Session\SessionMiddleware;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -14,13 +17,18 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class TemplateMiddleware implements MiddlewareInterface
 {
+    /** @var callable $factory */
+    private $factory;
+
     private string $layout = 'layout::default';
 
     public function __construct(
         private TemplateRendererInterface $template,
+        callable $factory,
         private array $settings,
         private array $data
     ) {
+        $this->factory = $factory;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
@@ -28,6 +36,25 @@ class TemplateMiddleware implements MiddlewareInterface
         $routeResult = $request->getAttribute(RouteResult::class, null);
         $routeName   = $routeResult?->getMatchedRouteName();
         $isHome      = $routeName === 'home' ? true : false;
+
+        /** @var LazySession */
+        $session = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE);
+        // if (! $session->has(UserInterface::class)) {
+        //     return $handler->handle(
+        //         $request->withAttribute(
+        //             UserInterface::class,
+        //             ($this->factory)('guest', ['Guest'], []) // then call the factory to create a guest
+        //         )
+        //     );
+        // }
+        // /** @var array<string, string[]> */
+        // $user = $session->get(UserInterface::class);
+        // return $handler->handle(
+        //     $request->withAttribute(
+        //         UserInterface::class,
+        //         ($this->factory)($user['username'], $user['roles'], $user['details'])
+        //     )
+        // );
 
         $this->template->addDefaultParam(
             TemplateRendererInterface::TEMPLATE_ALL,

@@ -14,7 +14,7 @@ use function strtolower;
 
 final class Login extends Form\Form implements InputFilterProviderInterface
 {
-    protected $attributes = ['class' => 'login-form col-8 ms-auto', 'method' => 'POST'];
+    protected $attributes = ['class' => 'login-form', 'method' => 'POST'];
     public function __construct($name = 'login', $options = ['mode' => self::HORIZONTAL_MODE, 'fieldset' => true])
     {
         parent::__construct($name, $options);
@@ -58,8 +58,8 @@ final class Login extends Form\Form implements InputFilterProviderInterface
                 ],
             ]);
             $this->add([
-                'name' => 'email',
-                'type' => Form\Element\Text::class,
+                'name' => 'password',
+                'type' => Form\Element\Password::class,
                 'attributes' => [
                     'class' => 'form-control custom-class',
                     'placeholder' => 'Email',
@@ -81,7 +81,7 @@ final class Login extends Form\Form implements InputFilterProviderInterface
                 'name'    => 'session_length_override',
                 'type'    => Form\Element\Checkbox::class,
                 'attributes' => [
-                    'value' => '1',
+                    'value' => '0',
                     /**
                      * attribute used in the input class="form-check-input"
                      * the example-checkbox is a custom class for css targeting, see the style sheet for the demo site
@@ -110,7 +110,7 @@ final class Login extends Form\Form implements InputFilterProviderInterface
                     'label_options' => [
                         'label_position' => 'APPEND',
                     ],
-                    'help'            => 'Testing help text for checkbox\'s',
+                    'help'            => 'Check this box to stay logged in.',
                     'help_attributes' => [
                         'class' => 'form-text text-muted col-sm-10 offset-sm-2',
                     ],

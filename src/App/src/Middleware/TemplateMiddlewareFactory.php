@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
+use Mezzio\Authentication\UserInterface;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Container\ContainerInterface;
 
@@ -13,6 +14,7 @@ class TemplateMiddlewareFactory
     {
         return new TemplateMiddleware(
             $container->get(TemplateRendererInterface::class),
+            $container->get(UserInterface::class),
             $container->get('config')['settings'],
             $container->get('config')['data']
         );
