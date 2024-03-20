@@ -37,6 +37,10 @@ class LoginFieldset extends Form\Fieldset implements InputFilterProviderInterfac
                 'horizontal_attributes' => [
                     'class' => 'col-lg-6',
                 ],
+                'help'            => 'Your email address.',
+                'help_attributes' => [
+                    'class' => 'form-text text-muted col-sm-10 offset-sm-2',
+                ],
             ],
         ]);
         $this->add([

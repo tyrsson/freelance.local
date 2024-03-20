@@ -12,7 +12,11 @@ declare(strict_types=1);
             <?php if (in_array($link, $this->showOnHome)): ?>
                 <li><a class="<?=$link === $this->currentRoute ? 'nav-link scrollto active' : 'nav-link scrollto';?>" href="#<?=$link;?>"><?=ucfirst($link);?></a></li>
             <?php else: ?>
-                <li><a class="<?=$link === $this->currentRoute ? 'nav-link active' : 'nav-link';?>" href="/<?=$link;?>"><?=ucfirst($link);?></a></li>
+                <?php if ($this->user !== null && $link === 'login'): ?>
+                    <li><a class="<?=$link === $this->currentRoute ? 'nav-link active' : 'nav-link';?>" href="<?=$this->url('logout')?>">Logout</a></li>
+                <?php else: ?>
+                    <li><a class="<?=$link === $this->currentRoute ? 'nav-link active' : 'nav-link';?>" href="/<?=$link;?>"><?=ucfirst($link);?></a></li>
+                <?php endif; ?>
             <?php endif; ?>
         <?php
         endforeach;

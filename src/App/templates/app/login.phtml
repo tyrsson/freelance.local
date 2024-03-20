@@ -8,16 +8,20 @@ $this->headTitle(ucfirst($this->currentRoute));
     <div class="container">
         <div class="row">
             <div class="col-lg-9 ms-auto">
-        <?php
-            if (isset($this->error)) {
-                // show an error
-            }
+                <?php
+                    if (isset($this->error)) {
+                        // show an error
+                    }
 
-            if (isset($this->form)) {
-                $this->form->addSubmit(priority: -1, showText: 'Login');
-                echo $this->form($this->form);
-            }
-        ?>
+                    if (isset($this->form)) {
+                        $this->form->addSubmit(
+                            priority: -1,
+                            showText: 'Login',
+                            class: 'btn btn-md btn-info text-light'
+                        );
+                        echo $this->form($this->form);
+                    }
+                ?>
             </div>
         </div>
     </div>

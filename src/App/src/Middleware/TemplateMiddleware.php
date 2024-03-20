@@ -39,22 +39,13 @@ class TemplateMiddleware implements MiddlewareInterface
 
         /** @var LazySession */
         $session = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE);
-        // if (! $session->has(UserInterface::class)) {
-        //     return $handler->handle(
-        //         $request->withAttribute(
-        //             UserInterface::class,
-        //             ($this->factory)('guest', ['Guest'], []) // then call the factory to create a guest
-        //         )
-        //     );
-        // }
-        // /** @var array<string, string[]> */
-        // $user = $session->get(UserInterface::class);
-        // return $handler->handle(
-        //     $request->withAttribute(
-        //         UserInterface::class,
-        //         ($this->factory)($user['username'], $user['roles'], $user['details'])
-        //     )
-        // );
+        $user    = $session->get(UserInterface::class);
+        // If we have a user then assign it to all templates, this does not assign it to partials
+        $this->template->addDefaultParam(
+            TemplateRendererInterface::TEMPLATE_ALL,
+            'user',
+            $user
+        );
 
         $this->template->addDefaultParam(
             TemplateRendererInterface::TEMPLATE_ALL,
@@ -79,11 +70,12 @@ class TemplateMiddleware implements MiddlewareInterface
         $nav->setTemplate('partial::nav');
         $nav->setVariables(
             [
-                'isHome' => $isHome,
-                'activeLinks' => $this->settings['showInMenu'] + $this->settings['showOnHome'],
+                'isHome'             => $isHome,
+                'activeLinks'        => $this->settings['showInMenu'] + $this->settings['showOnHome'],
                 'enableDropDownMenu' => $this->settings['enableDropDownMenu'],
-                'showOnHome' => $this->settings['showOnHome'],
-                'currentRoute' => $routeName,
+                'showOnHome'         => $this->settings['showOnHome'],
+                'currentRoute'       => $routeName,
+                'user'               => $user,
             ]
         );
         // assign it to the layout since its global

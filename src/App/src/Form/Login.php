@@ -6,6 +6,7 @@ namespace App\Form;
 
 use App\Form\Fieldset\LoginFieldset;
 use Laminas\Filter;
+use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\InputFilter\InputFilterProviderInterface;
 use Laminas\Validator;
 use Limatus\Form;
@@ -15,7 +16,15 @@ use function strtolower;
 final class Login extends Form\Form implements InputFilterProviderInterface
 {
     protected $attributes = ['class' => 'login-form', 'method' => 'POST'];
-    public function __construct($name = 'login', $options = ['mode' => self::HORIZONTAL_MODE, 'fieldset' => true])
+    /**
+     * $options['fieldset'] must be false since the Authentication component expects username and passoword
+     * to be in the top level of the POST array
+     * @param string $name
+     * @param array $options
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function __construct($name = 'login', $options = ['mode' => self::HORIZONTAL_MODE, 'fieldset' => false])
     {
         parent::__construct($name, $options);
     }
@@ -42,7 +51,7 @@ final class Login extends Form\Form implements InputFilterProviderInterface
                 'type' => Form\Element\Text::class,
                 'attributes' => [
                     'class' => 'form-control custom-class',
-                    'placeholder' => 'User Name',
+                    //'placeholder' => 'User Name',
                 ],
                 'options' => [
                     'label' => 'User Name',
@@ -53,7 +62,11 @@ final class Login extends Form\Form implements InputFilterProviderInterface
                         'class' => 'row mb-3',
                     ],
                     'horizontal_attributes' => [
-                        'class' => 'col-sm-10',
+                        'class' => 'col-lg-6',
+                    ],
+                    'help'            => 'Your email address.',
+                    'help_attributes' => [
+                        'class' => 'form-text text-muted col-sm-10 offset-sm-2',
                     ],
                 ],
             ]);
@@ -62,10 +75,10 @@ final class Login extends Form\Form implements InputFilterProviderInterface
                 'type' => Form\Element\Password::class,
                 'attributes' => [
                     'class' => 'form-control custom-class',
-                    'placeholder' => 'Email',
+                    //'placeholder' => 'Email',
                 ],
                 'options' => [
-                    'label' => 'Email',
+                    'label' => 'Password',
                     'label_attributes'     => [
                         'class' => 'col-sm-2 col-form-label'
                     ],
@@ -73,7 +86,7 @@ final class Login extends Form\Form implements InputFilterProviderInterface
                         'class' => 'row mb-3',
                     ],
                     'horizontal_attributes' => [
-                        'class' => 'col-sm-10',
+                        'class' => 'col-lg-6',
                     ],
                 ],
             ]);
