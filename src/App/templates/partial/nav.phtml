@@ -5,16 +5,29 @@ declare(strict_types=1);
 ?>
 <nav id="navbar" class="navbar">
     <ul>
-        <li><a class="<?=$this->currentRoute === 'home' ? 'nav-link active' : 'nav-link';?>" href="<?=$this->url('home');?>">Home</a></li>
+        <?php
+        // $linkById is true then we want an active link only when we are at #hero
+            $linkById = $this->singlePage && $this->showOnHome !== [];
+        ?>
+        <li><a class="<?= ! $linkById ? 'nav-link active' : 'nav-link scrollto';?>" href="<?=$linkById ? '#hero' : $this->url('home');?>">Home</a></li>
         <?php
         foreach ($this->activeLinks as $link):
         ?>
             <?php if (in_array($link, $this->showOnHome)): ?>
                 <li><a class="<?=$link === $this->currentRoute ? 'nav-link scrollto active' : 'nav-link scrollto';?>" href="#<?=$link;?>"><?=ucfirst($link);?></a></li>
             <?php else: ?>
-                <?php if ($this->user !== null && $link === 'login'): ?>
+                <?php if (
+                        $this->user !== null
+                        && $link === 'login'
+                        && $this->enableLogin
+                        && ! $this->enableLoginModal
+                    ): ?>
                     <li><a class="<?=$link === $this->currentRoute ? 'nav-link active' : 'nav-link';?>" href="<?=$this->url('logout')?>">Logout</a></li>
-                <?php else: ?>
+                <?php elseif(
+                        $link === 'login'
+                        && $this->enableLogin
+                        && ! $this->enableLoginModal
+                    ): ?>
                     <li><a class="<?=$link === $this->currentRoute ? 'nav-link active' : 'nav-link';?>" href="/<?=$link;?>"><?=ucfirst($link);?></a></li>
                 <?php endif; ?>
             <?php endif; ?>

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
+use App\Form\Login;
+use Laminas\Form\FormElementManager;
 use Laminas\View\Model\ViewModel;
 use Mezzio\Authentication\UserInterface;
 use Mezzio\Router\RouteResult;
@@ -24,6 +26,7 @@ class TemplateMiddleware implements MiddlewareInterface
 
     public function __construct(
         private TemplateRendererInterface $template,
+        private FormElementManager $formManager,
         callable $factory,
         private array $settings,
         private array $data
@@ -65,6 +68,29 @@ class TemplateMiddleware implements MiddlewareInterface
             $this->settings['siteName']
         );
 
+        $this->template->addDefaultParam(
+            TemplateRendererInterface::TEMPLATE_ALL,
+            'enableLogin',
+            $this->settings['enableLogin'],
+        );
+
+        $this->template->addDefaultParam(
+            TemplateRendererInterface::TEMPLATE_ALL,
+            'enableLoginModal',
+            $this->settings['enableLoginModal']
+        );
+
+        if ($request->getAttribute('enableLoginModal', false) && $request->getAttribute('enableLogin', false)) {
+            $loginModal = new ViewModel();
+            $loginModal->setTemplate('partial::login-modal');
+            $loginModal->setVariable('form', $this->formManager->get(Login::class));
+            $this->template->addDefaultParam(
+                $this->layout,
+                'loginModal',
+                $loginModal
+            );
+        }
+
         // create the nav model
         $nav = new ViewModel();
         $nav->setTemplate('partial::nav');
@@ -76,6 +102,9 @@ class TemplateMiddleware implements MiddlewareInterface
                 'showOnHome'         => $this->settings['showOnHome'],
                 'currentRoute'       => $routeName,
                 'user'               => $user,
+                'enableLogin'        => $this->settings['enableLogin'],
+                'enableLoginModal'   => $this->settings['enableLoginModal'],
+                'singlePage'         => $this->settings['showOnHome'] !== [] || $this->settings['singlePage'],
             ]
         );
         // assign it to the layout since its global

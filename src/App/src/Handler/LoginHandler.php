@@ -7,6 +7,7 @@ namespace App\Handler;
 use App\Form\Login;
 use Fig\Http\Message\RequestMethodInterface as Http;
 use Laminas\Diactoros\Response\HtmlResponse;
+use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Diactoros\Response\RedirectResponse;
 use Laminas\Diactoros\Uri;
 use Mezzio\Authentication\Session\PhpSession;
@@ -33,6 +34,9 @@ class LoginHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        if (! $request->getAttribute('enableLogin', false)) {
+            return new RedirectResponse('/');
+        }
         /** @var LazySession */
         $session  = $request->getAttribute('session');
         $redirect = $this->getRedirect($request, $session);
@@ -43,6 +47,7 @@ class LoginHandler implements RequestHandlerInterface
         }
         // Display initial login form
         $session->set(self::REDIRECT_ATTRIBUTE, $redirect);
+
         // Render and return a response:
         return new HtmlResponse($this->template->render(
             'app::login',
@@ -62,7 +67,17 @@ class LoginHandler implements RequestHandlerInterface
 
         if ($this->adapter->authenticate($request)) {
             $session->unset(self::REDIRECT_ATTRIBUTE);
-            return new RedirectResponse($redirect);
+
+            // handle ajaxed login from modal
+            if ($request->getAttribute('isAjax', false)) {
+                return new JsonResponse(['message' => 'Login Successful']);
+            } else {
+                // non ajaxed redirect
+                return new RedirectResponse($redirect);
+            }
+        } elseif ($request->getAttribute('isAjax', false)) {
+            // ajaxed login failure, let them know
+            return new JsonResponse(['message' => 'Login Failed'], 401);
         }
 
         return new HtmlResponse($this->template->render(

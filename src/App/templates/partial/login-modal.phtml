@@ -1,0 +1,30 @@
+<div id="login-modal" class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Login</h1>
+      </div>
+      <div class="modal-body">
+      <?php
+        if (isset($this->error)) {
+            // show an error
+        }
+
+        if (isset($this->form)) {
+            $this->form->setAttribute('action', $this->url('login'));
+            // $this->form->addSubmit(
+            //     priority: -1,
+            //     showText: 'Login',
+            //     class: 'btn btn-md btn-info text-light'
+            // );
+            echo $this->form($this->form);
+        }
+      ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button id="modal-login-submit" type="button" class="btn btn-primary">Login</button>
+      </div>
+    </div>
+  </div>
+</div>

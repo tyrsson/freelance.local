@@ -24,7 +24,7 @@ final class Login extends Form\Form implements InputFilterProviderInterface
      * @return void
      * @throws InvalidArgumentException
      */
-    public function __construct($name = 'login', $options = ['mode' => self::HORIZONTAL_MODE, 'fieldset' => false])
+    public function __construct($name = 'login-form', $options = ['mode' => self::HORIZONTAL_MODE, 'fieldset' => false])
     {
         parent::__construct($name, $options);
     }
