@@ -1,8 +1,9 @@
-<div id="login-modal" class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- login modal -->
+<div id="login-modal" class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Login</h1>
+        <h1 class="modal-title fs-5" id="loginModalLabel">Login</h1>
       </div>
       <div class="modal-body">
       <?php
@@ -10,21 +11,54 @@
             // show an error
         }
 
-        if (isset($this->form)) {
-            $this->form->setAttribute('action', $this->url('login'));
+        if (isset($this->loginForm)) {
+            $this->loginForm->setAttribute('action', $this->url('login'));
             // $this->form->addSubmit(
             //     priority: -1,
             //     showText: 'Login',
             //     class: 'btn btn-md btn-info text-light'
             // );
-            echo $this->form($this->form);
+            echo $this->form($this->loginForm);
         }
       ?>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button id="modal-login-submit" type="button" class="btn btn-primary">Login</button>
+        <button id="login-modal-submit" type="button" class="btn btn-primary">Login</button>
       </div>
     </div>
   </div>
 </div>
+<!-- end login modal -->
+<!-- login modal -->
+<div id="login-modal" class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="loginModalLabel">Login</h1>
+      </div>
+      <div class="modal-body">
+      <?php
+        if (isset($this->error)) {
+            // show an error
+        }
+
+        if (isset($this->settingForm)) {
+            $this->settingForm->setAttribute('action', $this->url('login'));
+            // $this->form->addSubmit(
+            //     priority: -1,
+            //     showText: 'Login',
+            //     class: 'btn btn-md btn-info text-light'
+            // );
+            echo $this->form($this->settingForm);
+        }
+      ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button id="login-modal-submit" type="button" class="btn btn-primary">Login</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end login modal -->

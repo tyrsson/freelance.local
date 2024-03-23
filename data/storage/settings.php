@@ -5,7 +5,7 @@ return [
         'singlePage'         => true,
         'enableDropDownMenu' => false,
         'enableLogin'        => true,
-        'enableLoginModal'   => true,
+        'enableLoginModal'   => false,
         'showInMenu' => [ // todo: build menu from this
             'about', 'services', 'faq', 'skills', 'contact', 'login'
         ],

@@ -13,6 +13,10 @@ declare(strict_types=1);
 return [
     'dependencies' => [
         'factories' => [
+            App\ApiHandler\FormHandler::class => App\ApiHandler\FormHandlerFactory::class,
+            App\ApiHandler\SaveHandler::class => App\ApiHandler\SaveHandlerFactory::class,
+            App\ApiHandler\SettingsHandler::class => App\ApiHandler\SettingsHandlerFactory::class,
+            App\ApiMiddleware\SaveMiddleware::class => App\ApiMiddleware\SaveMiddlewareFactory::class,
             App\Handler\ContactHandler::class => App\Handler\ContactHandlerFactory::class,
             App\Middleware\ContactMiddleware::class => App\Middleware\ContactMiddlewareFactory::class,
             App\Middleware\SettingsMiddleware::class => App\Middleware\SettingsMiddlewareFactory::class,

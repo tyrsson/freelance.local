@@ -69,13 +69,8 @@ $this->inlineScript()
                 <!-- Uncomment below if you prefer to use an image logo -->
                 <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
                 <!-- nav -->
-                <?php if (isset($this->loginModal)): ?>
-                    <?php if ($this->enableLogin && $this->enableLoginModal && ! $this->user): ?>
-                    <button id="open-login-modal" type="button" class="btn btn-primary">Login</button>
-                    <?php endif; ?>
-                <?php endif; ?>
                 <?php if ($this->user): ?>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@fat">Manage Settings</button>
+                    <button id="open-settings-modal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@fat">Manage Settings</button>
                     <?php endif; ?>
                 <?php
                     if (isset($this->nav)) {

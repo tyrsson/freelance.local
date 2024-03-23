@@ -29,13 +29,24 @@ declare(strict_types=1);
                         && ! $this->enableLoginModal
                     ): ?>
                     <li><a class="<?=$link === $this->currentRoute ? 'nav-link active' : 'nav-link';?>" href="/<?=$link;?>"><?=ucfirst($link);?></a></li>
+                <?php elseif(
+                        $link === 'login'
+                        && $this->enableLogin
+                        && $this->enableLoginModal
+                    ): ?>
+                    <li><a id="open-login-modal" class="<?=$link === $this->currentRoute ? 'nav-link active' : 'nav-link';?>" href="#"><?=ucfirst($link);?></a></li>
                 <?php endif; ?>
             <?php endif; ?>
         <?php
         endforeach;
         ?>
         <?php
+        // disable support for this for the moment
+        if ($this->enableDropDownMenu) {
+            $this->enableDropDownMenu = false;
+        }
         if ($this->enableDropDownMenu):
+            // a config for this, array interiorPages
         ?>
         <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
             <ul>

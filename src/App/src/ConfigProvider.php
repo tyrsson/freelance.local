@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Storage\RepositoryInterface;
 use Laminas\Filter;
 use Laminas\Validator;
-use Laminas\View\Model\ModelInterface;
 use Mezzio\Authentication\AuthenticationInterface;
 use Mezzio\Authentication\Session\PhpSession;
 use Mezzio\Authentication\UserRepositoryInterface;
+
+use function basename;
+use function glob;
+use function ucfirst;
+
+use const GLOB_BRACE;
 
 /**
  * The configuration provider for the App module
@@ -33,8 +39,9 @@ class ConfigProvider
             /**
              * This key is the one that is required by the Abstract filter factory
              */
-            'input_filter_specs' => $this->getInputFilterSpecs(),
-            'templates'      => $this->getTemplates(),
+            'input_filter_specs'       => $this->getInputFilterSpecs(),
+            RepositoryInterface::class => $this->getRepositorySpecs(),
+            'templates'                => $this->getTemplates(),
             /**
              * This key is the key you will find targeted in the doctype helper factory.
              * It can be added to any ConfigProvider to aggregate configuration to the view helpers
@@ -49,6 +56,9 @@ class ConfigProvider
     public function getDependencies(): array
     {
         return [
+            'abstract_factories' => [
+                Storage\AbstractRepositoryServiceFactory::class,
+            ],
             'aliases' => [
                 AuthenticationInterface::class => PhpSession::class,
                 UserRepositoryInterface::class => UserRepository\PhpArray::class,
@@ -74,6 +84,24 @@ class ConfigProvider
                 Form\Login::class => Form\LoginFactory::class,
                 Form\Fieldset\LoginFieldset::class => Form\Fieldset\LoginFieldsetFactory::class,
             ],
+        ];
+    }
+
+    public function getRepositorySpecs(): array
+    {
+        $repos = ['repositories'];
+        foreach (glob(Storage\RepositoryInterface::STORAGE_PATH . '{[!auth.php]}*.php', GLOB_BRACE) as $path) {
+            $name = basename($path, '.php');
+            $serviceName = Storage\Repository::class . '\\' . ucfirst($name);
+            $repos[] = [
+                $serviceName => [
+                    'name' => $name,
+                    'path' => $path,
+                ],
+            ];
+        }
+        return [
+            $repos,
         ];
     }
 

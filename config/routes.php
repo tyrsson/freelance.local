@@ -41,6 +41,26 @@ use Psr\Container\ContainerInterface;
 
 return static function (Application $app, MiddlewareFactory $factory, ContainerInterface $container): void {
     $app->get('/', App\Handler\HomePageHandler::class, 'home');
+
+    $app->route(
+        '/api/save',
+        [
+            BodyParamsMiddleware::class,
+            App\ApiMiddleware\SaveMiddleware::class,
+            App\ApiHandler\SaveHandler::class
+        ],
+        ['POST', 'PUT'],
+        'save'
+    );
+    $app->route(
+        '/api/form/{requestedName: \s+}', // here requestedName will be the same as the target $requestedName passed to the abstract factory
+        [
+            App\ApiHandler\FormHandler::class
+        ],
+        ['GET'],
+        'form'
+    );
+
     /**
      * This sets up a middleware pipeline and runs the middleware
      * and handlers in the order in which they are registered ie, their order in the array.
