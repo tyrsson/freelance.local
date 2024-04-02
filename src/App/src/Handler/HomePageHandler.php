@@ -8,7 +8,6 @@ use App\Storage\PageRepository;
 use App\Storage\PartialRepository;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\View\Model\ViewModel;
-use Mezzio\Router\RouteResult;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -16,7 +15,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class HomePageHandler implements RequestHandlerInterface
 {
-    private array $settings;
     private array $data;
     private string $homePage = 'app::home-page';
     private string $layout   = 'layout::default';
@@ -32,8 +30,6 @@ class HomePageHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        //$showOnHome = $this->repo->findAttachedPages(returnArray: true);
-
         $showOnHome = ($request->getAttribute('showOnHome'));
         $this->template->addDefaultParam(
             $this->homePage,
@@ -48,6 +44,7 @@ class HomePageHandler implements RequestHandlerInterface
             foreach ($resultSet as $row) {
                 if ($isSet === null) {
                     $hero->setTemplate($row->template);
+                    $isSet = true;
                 }
                 $hero->setVariable($row->variable, $row->value);
             }
@@ -57,17 +54,6 @@ class HomePageHandler implements RequestHandlerInterface
                 $hero
             );
         }
-
-        // if ($heroData->id > 0) {
-        //     $hero = new ViewModel();
-        //     $hero->setTemplate($heroData->template);
-        //     $hero->setVariables($this->data['hero']);
-        //     $this->template->addDefaultParam(
-        //         $this->layout,
-        //         'hero',
-        //         $hero
-        //     );
-        // }
 
         if (count($showOnHome) > 0) {
             // reset this for single page mode
@@ -79,7 +65,7 @@ class HomePageHandler implements RequestHandlerInterface
                     if (in_array($template, $showOnHome)) {
                         $child         = new ViewModel();
                         $child->setTemplate('page::' . $template);
-
+                        // todo remove $this->data usage
                         if (isset($this->data[$template])) {
                             // This trickery allows us to have a ['settings'][$template] and automatically inject them
                             $child->setVariables($this->data[$template]);
