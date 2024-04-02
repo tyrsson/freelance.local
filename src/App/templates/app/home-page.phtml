@@ -6,7 +6,7 @@ $this->headTitle('Home');
 
 if ($this->isHome && count($this->showOnHome) > 0) {
     foreach ($this->showOnHome as $page) {
-        echo $this->render($this->{$page});
+        echo $this->render($this->{$page['title']});
     }
 }
 

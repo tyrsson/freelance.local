@@ -1,0 +1,19 @@
+<?php
+if ($this->enableNewsletter):
+?>
+<div class="footer-newsletter">
+    <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+        <h4><?=$this->newsLetterHeading ?? '';?></h4>
+        <p><?=$this->newsLetterBlurb ?? '';?></p>
+        <form action="" method="post">
+            <input type="email" name="email"><input type="submit" value="Subscribe">
+        </form>
+        </div>
+    </div>
+    </div>
+</div>
+<?php
+endif;
+?>

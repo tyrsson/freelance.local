@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\UserRepository;
 
+use Axleus\Db;
+use Laminas\Hydrator\ReflectionHydrator;
 use Mezzio\Authentication\Exception;
 use Mezzio\Authentication\UserInterface;
 use Mezzio\Authentication\UserRepositoryInterface;
@@ -11,9 +13,8 @@ use Webmozart\Assert\Assert;
 
 use function password_verify;
 
-final class PhpArray implements UserRepositoryInterface
+final class TableGateway extends Db\AbstractRepository implements UserRepositoryInterface
 {
-
     /**
      * @var callable
      * @psalm-var callable(string, array<int|string, string>, array<string, mixed>): UserInterface
@@ -21,10 +22,11 @@ final class PhpArray implements UserRepositoryInterface
     private $userFactory;
 
     public function __construct(
-        private string $credential,
-        private string $hash,
-        callable $userFactory
+        private Db\TableGateway $gateway,
+        callable $userFactory,
+        private ReflectionHydrator $hydrator = new ReflectionHydrator(),
     ) {
+        parent::__construct($gateway, $hydrator);
         // Provide type safety for the composed user factory.
         $this->userFactory = static function (
             string $identity,
@@ -40,12 +42,12 @@ final class PhpArray implements UserRepositoryInterface
 
     public function authenticate(string $credential, ?string $password = null): ?UserInterface
     {
-        if (! $this->credential === $credential || $password === null) {
-            return null;
-        }
-        $this->checkBcryptHash($this->hash);
-        if (password_verify($password, $this->hash)) {
-            return ($this->userFactory)($credential, ['Administrator'], ['identity' => $this->credential]);
+        $user = $this->findOneByUsername($credential);
+        $hash = $user->getHash();
+
+        $this->checkBcryptHash($hash);
+        if (password_verify($password, $hash)) {
+            return ($this->userFactory)($credential, ['Administrator'], ['identity' => $credential]);
         }
         return null;
     }

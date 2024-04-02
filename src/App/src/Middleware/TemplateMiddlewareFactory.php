@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
+use App\Storage\PageRepository;
+use App\Storage\PartialRepository;
 use Laminas\Form\FormElementManager;
 use Mezzio\Authentication\UserInterface;
 use Mezzio\Template\TemplateRendererInterface;
@@ -16,9 +18,9 @@ class TemplateMiddlewareFactory
         return new TemplateMiddleware(
             $container->get(TemplateRendererInterface::class),
             $container->get(FormElementManager::class),
-            $container->get(UserInterface::class),
-            $container->get('config')['settings'],
-            $container->get('config')['data']
+            $container->get(PageRepository::class),
+            $container->get(PartialRepository::class),
+            $container->get(UserInterface::class)
         );
     }
 }

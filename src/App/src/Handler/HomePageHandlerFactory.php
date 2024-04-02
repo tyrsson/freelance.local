@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Handler;
 
-use Laminas\View\Model\ModelInterface;
+use App\Storage\PageRepository;
+use App\Storage\PartialRepository;
 use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Container\ContainerInterface;
@@ -26,6 +27,8 @@ class HomePageHandlerFactory
 
         return new HomePageHandler(
             $template,
+            $container->get(PageRepository::class),
+            $container->get(PartialRepository::class),
             $container->get('config')
         );
     }

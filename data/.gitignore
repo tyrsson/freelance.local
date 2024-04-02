@@ -5,3 +5,4 @@
 !storage
 !storage/*.php
 storage/auth.php
+!app.db

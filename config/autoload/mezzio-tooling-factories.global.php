@@ -7,7 +7,7 @@
  * removing factory definitions; other dependency types may be overwritten
  * when regenerating this file via mezzio-tooling commands.
  */
- 
+
 declare(strict_types=1);
 
 return [
@@ -15,11 +15,11 @@ return [
         'factories' => [
             App\ApiHandler\FormHandler::class => App\ApiHandler\FormHandlerFactory::class,
             App\ApiHandler\SaveHandler::class => App\ApiHandler\SaveHandlerFactory::class,
-            App\ApiHandler\SettingsHandler::class => App\ApiHandler\SettingsHandlerFactory::class,
             App\ApiMiddleware\SaveMiddleware::class => App\ApiMiddleware\SaveMiddlewareFactory::class,
             App\Handler\ContactHandler::class => App\Handler\ContactHandlerFactory::class,
+            App\Handler\PageHandler::class => App\Handler\PageHandlerFactory::class,
             App\Middleware\ContactMiddleware::class => App\Middleware\ContactMiddlewareFactory::class,
-            App\Middleware\SettingsMiddleware::class => App\Middleware\SettingsMiddlewareFactory::class,
+            App\Middleware\ContextMiddleware::class => App\Middleware\ContextMiddlewareFactory::class,
             App\Middleware\TemplateMiddleware::class => App\Middleware\TemplateMiddlewareFactory::class,
         ],
     ],

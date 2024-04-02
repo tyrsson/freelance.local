@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Handler;
 
+use App\Storage\PageRepository;
+use App\Storage\PartialRepository;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\View\Model\ViewModel;
 use Mezzio\Router\RouteResult;
@@ -21,24 +23,34 @@ class HomePageHandler implements RequestHandlerInterface
 
     public function __construct(
         private TemplateRendererInterface $template,
+        private PageRepository $pageRepo,
+        private PartialRepository $partialRepo,
         private array $config
     ) {
-        $this->settings = $config['settings'];
-        $this->data     = $config['data'];
+        $this->data = $config['data'];
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        //$showOnHome = $this->repo->findAttachedPages(returnArray: true);
+
+        $showOnHome = ($request->getAttribute('showOnHome'));
         $this->template->addDefaultParam(
             $this->homePage,
             'showOnHome',
-            $this->settings['showOnHome']
+            $showOnHome
         );
 
-        if (isset($this->data['hero'])) {
+        $resultSet = $this->partialRepo->findAllBySectionId('#hero');
+        if ($resultSet->count() > 0) {
             $hero = new ViewModel();
-            $hero->setTemplate('partial::hero');
-            $hero->setVariables($this->data['hero']);
+            $isSet = null;
+            foreach ($resultSet as $row) {
+                if ($isSet === null) {
+                    $hero->setTemplate($row->template);
+                }
+                $hero->setVariable($row->variable, $row->value);
+            }
             $this->template->addDefaultParam(
                 $this->layout,
                 'hero',
@@ -46,14 +58,25 @@ class HomePageHandler implements RequestHandlerInterface
             );
         }
 
-        if (count($this->settings['showOnHome']) > 0) {
+        // if ($heroData->id > 0) {
+        //     $hero = new ViewModel();
+        //     $hero->setTemplate($heroData->template);
+        //     $hero->setVariables($this->data['hero']);
+        //     $this->template->addDefaultParam(
+        //         $this->layout,
+        //         'hero',
+        //         $hero
+        //     );
+        // }
+
+        if (count($showOnHome) > 0) {
             // reset this for single page mode
             $path  = $this->config['templates']['paths']['page'][0];
             $files = glob($path . '/*.phtml');
             if (count($files) >= 1) {
                 foreach ($files as $file) {
                     $template = basename($file, '.phtml');
-                    if (in_array($template, $this->settings['showOnHome'])) {
+                    if (in_array($template, $showOnHome)) {
                         $child         = new ViewModel();
                         $child->setTemplate('page::' . $template);
 

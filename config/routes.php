@@ -52,8 +52,9 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         ['POST', 'PUT'],
         'save'
     );
+    // here requestedName will be the same as the target $requestedName passed to the abstract factory
     $app->route(
-        '/api/form/{requestedName: \s+}', // here requestedName will be the same as the target $requestedName passed to the abstract factory
+        '/api/form/{requestedName: \s+}',
         [
             App\ApiHandler\FormHandler::class
         ],

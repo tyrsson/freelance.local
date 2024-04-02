@@ -2,9 +2,9 @@
 return [
     'data' => [
         'skills' => [
-            'img'          => 'skills.png', // string|null
-            'skillHeading' => 'Our Skillz', // string|null
-            'skillBlurb'   => 'These are the skillz we use most.', // string|null
+            'skillsImg'          => 'skills.png', // string|null
+            'skillsHeading' => 'Our Skillz', // string|null
+            'skillsBlurb'   => 'These are the skillz we use most.', // string|null
             'data' => [
                 [
                     'name'       => 'HTML', // string|null

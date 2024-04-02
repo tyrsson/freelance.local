@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App;
 
-use App\Storage\RepositoryInterface;
 use Laminas\Filter;
 use Laminas\Validator;
 use Mezzio\Authentication\AuthenticationInterface;
@@ -40,7 +39,6 @@ class ConfigProvider
              * This key is the one that is required by the Abstract filter factory
              */
             'input_filter_specs'       => $this->getInputFilterSpecs(),
-            RepositoryInterface::class => $this->getRepositorySpecs(),
             'templates'                => $this->getTemplates(),
             /**
              * This key is the key you will find targeted in the doctype helper factory.
@@ -56,12 +54,9 @@ class ConfigProvider
     public function getDependencies(): array
     {
         return [
-            'abstract_factories' => [
-                Storage\AbstractRepositoryServiceFactory::class,
-            ],
             'aliases' => [
                 AuthenticationInterface::class => PhpSession::class,
-                UserRepositoryInterface::class => UserRepository\PhpArray::class,
+                UserRepositoryInterface::class => UserRepository\TableGateway::class,
             ],
             'invokables' => [
                 Handler\PingHandler::class => Handler\PingHandler::class,
@@ -72,7 +67,10 @@ class ConfigProvider
                 Handler\LogoutHandler::class   => Handler\LogoutHandlerFactory::class,
                 Middleware\AjaxRequestMiddleware::class => Middleware\AjaxRequestMiddlewareFactory::class,
                 Middleware\IdentityMiddleware::class    => Middleware\IdentityMiddlewareFactory::class,
-                UserRepository\PhpArray::class          => UserRepository\PhpArrayFactory::class,
+                Storage\PageRepository::class           => Storage\PageRepositoryFactory::class,
+                Storage\PartialRepository::class        => Storage\PartialRepositoryFactory::class,
+                Storage\SettingsRepository::class       => Storage\SettingsRepositoryFactory::class,
+                UserRepository\TableGateway::class      => UserRepository\TableGatewayFactory::class,
             ],
         ];
     }
@@ -84,24 +82,6 @@ class ConfigProvider
                 Form\Login::class => Form\LoginFactory::class,
                 Form\Fieldset\LoginFieldset::class => Form\Fieldset\LoginFieldsetFactory::class,
             ],
-        ];
-    }
-
-    public function getRepositorySpecs(): array
-    {
-        $repos = ['repositories'];
-        foreach (glob(Storage\RepositoryInterface::STORAGE_PATH . '{[!auth.php]}*.php', GLOB_BRACE) as $path) {
-            $name = basename($path, '.php');
-            $serviceName = Storage\Repository::class . '\\' . ucfirst($name);
-            $repos[] = [
-                $serviceName => [
-                    'name' => $name,
-                    'path' => $path,
-                ],
-            ];
-        }
-        return [
-            $repos,
         ];
     }
 

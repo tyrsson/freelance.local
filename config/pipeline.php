@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Middleware\SettingsMiddleware;
 use App\Middleware\AjaxRequestMiddleware;
+use App\Middleware\ContextMiddleware;
 use App\Middleware\IdentityMiddleware;
 use App\Middleware\TemplateMiddleware;
 use Laminas\Stratigility\Middleware\ErrorHandler;
 use Mezzio\Application;
 use Mezzio\Handler\NotFoundHandler;
 use Mezzio\Helper\ServerUrlMiddleware;
-use Mezzio\Helper\Template\TemplateVariableContainerMiddleware;
 use Mezzio\Helper\UrlHelperMiddleware;
 use Mezzio\MiddlewareFactory;
 use Mezzio\Router\Middleware\DispatchMiddleware;
@@ -48,7 +47,7 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     // - $app->pipe('/api', $apiMiddleware);
     // - $app->pipe('/docs', $apiDocMiddleware);
     // - $app->pipe('/files', $filesMiddleware);
-    $app->pipe(SettingsMiddleware::class);
+    $app->pipe(ContextMiddleware::class);
     $app->pipe(SessionMiddleware::class);
     $app->pipe(IdentityMiddleware::class);
     $app->pipe(AjaxRequestMiddleware::class);

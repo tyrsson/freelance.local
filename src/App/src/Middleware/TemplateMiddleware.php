@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Middleware;
 
 use App\Form\Login;
+use App\Storage\PageRepository;
+use App\Storage\PartialRepository;
 use Laminas\Form\FormElementManager;
 use Laminas\View\Model\ViewModel;
 use Mezzio\Authentication\UserInterface;
@@ -27,9 +29,9 @@ class TemplateMiddleware implements MiddlewareInterface
     public function __construct(
         private TemplateRendererInterface $template,
         private FormElementManager $formManager,
-        callable $factory,
-        private array $settings,
-        private array $data
+        private PageRepository $pageRepo,
+        private PartialRepository $partialRepo,
+        callable $factory
     ) {
         $this->factory = $factory;
     }
@@ -39,6 +41,11 @@ class TemplateMiddleware implements MiddlewareInterface
         $routeResult = $request->getAttribute(RouteResult::class, null);
         $routeName   = $routeResult?->getMatchedRouteName();
         $isHome      = $routeName === 'home' ? true : false;
+        $settings    = $request->getAttribute('settings', null);
+
+        // we need arrays here
+        $showOnHome = ($request->getAttribute('showOnHome'));
+        $showInMenu = $request->getAttribute('showInMenu');
 
         /** @var LazySession */
         $session = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE);
@@ -65,22 +72,22 @@ class TemplateMiddleware implements MiddlewareInterface
         $this->template->addDefaultParam(
             TemplateRendererInterface::TEMPLATE_ALL,
             'siteName',
-            $this->settings['siteName']
+            $settings?->siteName
         );
 
         $this->template->addDefaultParam(
             TemplateRendererInterface::TEMPLATE_ALL,
             'enableLogin',
-            $this->settings['enableLogin'],
+            $settings?->enableLogin
         );
 
         $this->template->addDefaultParam(
             TemplateRendererInterface::TEMPLATE_ALL,
             'enableLoginModal',
-            $this->settings['enableLoginModal']
+            $settings?->enableLoginModal
         );
 
-        if ($request->getAttribute('enableLoginModal', false) && $request->getAttribute('enableLogin', false)) {
+        if ($settings?->enableLoginModal && $settings?->enableLogin) {
             $loginModal = new ViewModel();
             $loginModal->setTemplate('partial::login-modal');
             $loginModal->setVariable('form', $this->formManager->get(Login::class));
@@ -96,15 +103,12 @@ class TemplateMiddleware implements MiddlewareInterface
         $nav->setTemplate('partial::nav');
         $nav->setVariables(
             [
-                'isHome'             => $isHome,
-                'activeLinks'        => $this->settings['showInMenu'] + $this->settings['showOnHome'],
-                'enableDropDownMenu' => $this->settings['enableDropDownMenu'],
-                'showOnHome'         => $this->settings['showOnHome'],
-                'currentRoute'       => $routeName,
-                'user'               => $user,
-                'enableLogin'        => $this->settings['enableLogin'],
-                'enableLoginModal'   => $this->settings['enableLoginModal'],
-                'singlePage'         => $this->settings['showOnHome'] !== [] || $this->settings['singlePage'],
+                'isHome'       => $isHome,
+                'activeLinks'  => $showInMenu + $showOnHome,
+                'showOnHome'   => $showOnHome,
+                'currentRoute' => $routeName,
+                'user'         => $user,
+                'settings'     => $settings,
             ]
         );
         // assign it to the layout since its global
@@ -114,12 +118,21 @@ class TemplateMiddleware implements MiddlewareInterface
             $nav
         );
 
+        // todo: fix newsletter rendering in footer, currently broken. Maybe add it as child to footer once we get page settings returned
+        // $newsletterData = $this->pageRepo->findOneByTitle('newsletter');
+        // $newsletter = new ViewModel();
+        // $newsletter->setTemplate($newsletterData->template);
+
+
+        // footer WORKS!!!!!!!!!! Follow pattern
+
         // create the footer model
+        $footerData = $this->partialRepo->findOneBySectionId('#footer');
         $footer = new ViewModel();
-        $footer->setTemplate('partial::footer');
-        $footerVars = array_merge($this->data['footer'], $this->data['contact']);
-        $footer->setVariables($footerVars);
-        $footer->setVariable('siteName', $this->settings['siteName']);
+        $footer->setTemplate($footerData->template);
+        //$footerVars = array_merge($this->data['footer']);
+        //$footer->setVariables($footerVars);
+        $footer->setVariable('siteName', $settings?->siteName);
         $this->template->addDefaultParam(
             $this->layout,
             'footer',

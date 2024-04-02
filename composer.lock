@@ -4,8 +4,69 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "781e08caf4a314693255858070b2cb07",
+    "content-hash": "20174c459952a694416e6ede64b5305f",
     "packages": [
+        {
+            "name": "axleus/axleus-db",
+            "version": "1.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/axleus/axleus-db.git",
+                "reference": "49b9ef2f11003ea6d7cfd3320eeb557486e63fc4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/axleus/axleus-db/zipball/49b9ef2f11003ea6d7cfd3320eeb557486e63fc4",
+                "reference": "49b9ef2f11003ea6d7cfd3320eeb557486e63fc4",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-component-installer": "^3.2",
+                "laminas/laminas-db": "^2.18.0",
+                "php": "~8.1.0 || ~8.2.0"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "^2.5",
+                "phpunit/phpunit": "^10.2",
+                "psalm/plugin-phpunit": "^0.18.4",
+                "roave/security-advisories": "dev-master",
+                "vimeo/psalm": "^5.14"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laminas": {
+                    "module": "Axleus\\Db",
+                    "config-provider": "Axleus\\Db\\ConfigProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Axleus\\Db\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Joey Smith",
+                    "email": "jsmith@webinertia.net",
+                    "homepage": "https://github.com/axleus"
+                }
+            ],
+            "description": "Concrete Implementations of Laminas Db",
+            "keywords": [
+                "axleus",
+                "laminas-db"
+            ],
+            "support": {
+                "issues": "https://github.com/axleus/axleus-db/issues",
+                "source": "https://github.com/axleus/axleus-db/tree/1.0.x"
+            },
+            "time": "2024-02-24T20:45:50+00:00"
+        },
         {
             "name": "brick/varexporter",
             "version": "0.4.0",
@@ -450,6 +511,77 @@
                 }
             ],
             "time": "2023-09-19T12:35:37+00:00"
+        },
+        {
+            "name": "laminas/laminas-db",
+            "version": "2.19.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-db.git",
+                "reference": "5d8c89d767d4dac7b710c8c6d967f3780f7a5f6a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-db/zipball/5d8c89d767d4dac7b710c8c6d967f3780f7a5f6a",
+                "reference": "5d8c89d767d4dac7b710c8c6d967f3780f7a5f6a",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-stdlib": "^3.7.1",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0"
+            },
+            "conflict": {
+                "zendframework/zend-db": "*"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "^2.4.0",
+                "laminas/laminas-eventmanager": "^3.6.0",
+                "laminas/laminas-hydrator": "^4.7",
+                "laminas/laminas-servicemanager": "^3.19.0",
+                "phpunit/phpunit": "^9.5.25"
+            },
+            "suggest": {
+                "laminas/laminas-eventmanager": "Laminas\\EventManager component",
+                "laminas/laminas-hydrator": "(^3.2 || ^4.3) Laminas\\Hydrator component for using HydratingResultSets",
+                "laminas/laminas-servicemanager": "Laminas\\ServiceManager component"
+            },
+            "type": "library",
+            "extra": {
+                "laminas": {
+                    "component": "Laminas\\Db",
+                    "config-provider": "Laminas\\Db\\ConfigProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Db\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Database abstraction layer, SQL abstraction, result set abstraction, and RowDataGateway and TableDataGateway implementations",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "db",
+                "laminas"
+            ],
+            "support": {
+                "chat": "https://laminas.dev/chat",
+                "docs": "https://docs.laminas.dev/laminas-db/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-db/issues",
+                "rss": "https://github.com/laminas/laminas-db/releases.atom",
+                "source": "https://github.com/laminas/laminas-db"
+            },
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2024-02-01T18:53:10+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -8356,6 +8488,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "axleus/axleus-db": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": false,
