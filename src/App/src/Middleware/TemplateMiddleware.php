@@ -127,7 +127,7 @@ class TemplateMiddleware implements MiddlewareInterface
         // footer WORKS!!!!!!!!!! Follow pattern
 
         // create the footer model
-        $footerData = $this->partialRepo->findOneBySectionId('#footer');
+        $footerData = $this->partialRepo->findOneBySectionId('footer');
         $footer = new ViewModel();
         $footer->setTemplate($footerData->template);
         //$footerVars = array_merge($this->data['footer']);

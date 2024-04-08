@@ -15,7 +15,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class HomePageHandler implements RequestHandlerInterface
 {
-    private array $data;
     private string $homePage = 'app::home-page';
     private string $layout   = 'layout::default';
 
@@ -25,7 +24,6 @@ class HomePageHandler implements RequestHandlerInterface
         private PartialRepository $partialRepo,
         private array $config
     ) {
-        $this->data = $config['data'];
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -37,9 +35,9 @@ class HomePageHandler implements RequestHandlerInterface
             $showOnHome
         );
 
-        $resultSet = $this->partialRepo->findAllBySectionId('#hero');
+        $resultSet = $this->partialRepo->findAllBySectionId('hero');
         if ($resultSet->count() > 0) {
-            $hero = new ViewModel();
+            $hero  = new ViewModel();
             $isSet = null;
             foreach ($resultSet as $row) {
                 if ($isSet === null) {
@@ -56,26 +54,24 @@ class HomePageHandler implements RequestHandlerInterface
         }
 
         if (count($showOnHome) > 0) {
-            // reset this for single page mode
+            // we are only hunting page template files here, partials are handled differently ;)
             $path  = $this->config['templates']['paths']['page'][0];
             $files = glob($path . '/*.phtml');
-            if (count($files) >= 1) {
-                foreach ($files as $file) {
-                    $template = basename($file, '.phtml');
-                    if (in_array($template, $showOnHome)) {
-                        $child         = new ViewModel();
-                        $child->setTemplate('page::' . $template);
-                        // todo remove $this->data usage
-                        if (isset($this->data[$template])) {
-                            // This trickery allows us to have a ['settings'][$template] and automatically inject them
-                            $child->setVariables($this->data[$template]);
-                        }
-                        $this->template->addDefaultParam(
-                            $this->homePage,
-                            $template,
-                            $child
-                        );
-                    }
+            $templates = [];
+            foreach ($files as $file) {
+                $templates[] = basename($file, '.phtml');
+            }
+
+            foreach ($showOnHome as $attached) {
+                if ($attached['showOnHome'] && in_array($attached['sectionId'], $templates)) {
+                    $child = new ViewModel();
+                    $child->setTemplate($attached['template']);
+                    $child->setVariables($attached);
+                    $this->template->addDefaultParam(
+                        $this->homePage,
+                        $attached['sectionId'],
+                        $child
+                    );
                 }
             }
         }

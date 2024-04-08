@@ -6,10 +6,10 @@ namespace App\Storage;
 
 use Axleus\Db;
 use Laminas\Db\Adapter\AdapterInterface;
-use Laminas\Db\ResultSet\ResultSet;
-use Laminas\Db\TableGateway\Feature\RowGatewayFeature;
+use Laminas\Db\ResultSet\HydratingResultSet;
 use Laminas\Db\TableGateway\Feature\FeatureSet;
 use Laminas\EventManager\EventManagerInterface;
+use Laminas\Hydrator\ArraySerializableHydrator;
 use Psr\Container\ContainerInterface;
 
 final class PartialRepositoryFactory
@@ -18,21 +18,27 @@ final class PartialRepositoryFactory
     {
         $adapter = $container->get(AdapterInterface::class);
         $em      = $container->get(EventManagerInterface::class);
-        return new PartialRepository(
+        $hydrator = new ArraySerializableHydrator();
+        $repo = new PartialRepository(
             new Db\TableGateway(
                 'tpl_partial_data',
                 $adapter,
                 new FeatureSet(
                     [
-                        new RowGatewayFeature(new PartialEntity('id', 'tpl_partial', $adapter)),
+                        //new RowGatewayFeature(new PartialEntity('id', 'tpl_partial', $adapter)),
                         new Db\Feature\RelatedTableFeature(new PartialTableReference())
                     ]
                 ),
-                new ResultSet(),
+                new HydratingResultSet(
+                    $hydrator,
+                    new PartialEntity([], PartialEntity::ARRAY_AS_PROPS)
+                ),
                 null,
                 $em,
                 new Listener\PartialListener()
             )
         );
+        $repo->setHydrator($hydrator);
+        return $repo;
     }
 }

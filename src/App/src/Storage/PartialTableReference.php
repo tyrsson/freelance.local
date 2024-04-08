@@ -12,7 +12,7 @@ final class PartialTableReference extends Db\Feature\RelatedTable\AbstractTableR
     protected array $referenceMap = [
         [
             'join_table'  => 'tpl_partial',
-            'ref_type'    => self::REF_DEPENDENT,
+            'ref_type'    => self::REF_PARENT,
             'parent_key'   => 'partialId',
             'join_type'   => Join::JOIN_INNER,
             'fk'          => 'id'

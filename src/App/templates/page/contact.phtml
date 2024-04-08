@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 ?>
-<section id="contact" class="contact">
+<section id="<?=$this->sectionId ?? $this->title?>" class="contact">
     <div class="container" data-aos="fade-up">
         <div class="section-title">
-            <h2>Contact</h2>
-            <p><?=$this->contactBlurb ?? '';?></p>
+            <h2><?=$this->label ?? ucfirst($this->title)?></h2>
+            <p><?=$this->blurb ?? '';?></p>
         </div>
         <div class="row">
             <div class="col-lg-5 d-flex align-items-stretch">
