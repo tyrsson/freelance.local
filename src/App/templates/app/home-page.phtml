@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 $this->headTitle('Home');
 
-if ($this->isHome && count($this->showOnHome) > 0) {
-    foreach ($this->showOnHome as $page) {
-        echo $this->render($this->{$page['title']});
+if ($this->isHome && count($this->attachedPages) > 0) {
+    foreach ($this->attachedPages as $page) {
+        echo $this->render($this->{$page});
     }
 }
 

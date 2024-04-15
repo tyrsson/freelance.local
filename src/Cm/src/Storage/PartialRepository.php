@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\Storage;
+namespace Cm\Storage;
 
 use Axleus\Db;
 use Laminas\Db\ResultSet\HydratingResultSet;
 use Laminas\Db\ResultSet\ResultSetInterface;
+use Laminas\Db\Sql\Join;
+use Laminas\Db\Sql\Select;
 use Laminas\Db\Sql\Where;
 
-final class PageRepository extends Db\AbstractRepository
+final class PartialRepository extends Db\AbstractRepository
 {
     use Db\RepositoryTrait;
+
+    private string $dependentTable = 'tpl_partial_data';
+    private string $dependentFk    = 'partialId';
 
     public function findAttachedPages(
         ?string $title = 'home',
@@ -60,5 +65,23 @@ final class PageRepository extends Db\AbstractRepository
             return $resultSet;
         }
         return $resultSet->toArray();
+    }
+
+    // todo: let off in this method
+    public function findPartialWithData(string $sectionId, array $columns = [Select::SQL_STAR])
+    {
+        $where = new Where();
+        $where->equalTo('sectionId', $sectionId);
+        $select = new Select();
+        $select->from(['p' => $this->gateway->getTable()]);
+        $select->where($where);
+        $select->join(
+            ['d' => $this->dependentTable],
+            'p.id = d.' . $this->dependentFk,
+            $columns,
+            Join::JOIN_INNER
+        );
+       $resultSet = $this->gateway->selectWith($select);
+       return $resultSet;
     }
 }

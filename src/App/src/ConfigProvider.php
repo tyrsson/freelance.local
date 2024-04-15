@@ -62,14 +62,11 @@ class ConfigProvider
                 Handler\PingHandler::class => Handler\PingHandler::class,
             ],
             'factories'  => [
-                Handler\HomePageHandler::class => Handler\HomePageHandlerFactory::class,
-                Handler\LoginHandler::class    => Handler\LoginHandlerFactory::class,
-                Handler\LogoutHandler::class   => Handler\LogoutHandlerFactory::class,
+                Handler\HomePageHandler::class          => Handler\HomePageHandlerFactory::class,
+                Handler\LoginHandler::class             => Handler\LoginHandlerFactory::class,
+                Handler\LogoutHandler::class            => Handler\LogoutHandlerFactory::class,
                 Middleware\AjaxRequestMiddleware::class => Middleware\AjaxRequestMiddlewareFactory::class,
                 Middleware\IdentityMiddleware::class    => Middleware\IdentityMiddlewareFactory::class,
-                Storage\PageRepository::class           => Storage\PageRepositoryFactory::class,
-                Storage\PartialRepository::class        => Storage\PartialRepositoryFactory::class,
-                Storage\SettingsRepository::class       => Storage\SettingsRepositoryFactory::class,
                 UserRepository\TableGateway::class      => UserRepository\TableGatewayFactory::class,
             ],
         ];

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Storage;
+namespace Cm\Storage;
 
 use Axleus\Db\EntityInterface;
 use Laminas\Db\RowGateway\RowGateway;

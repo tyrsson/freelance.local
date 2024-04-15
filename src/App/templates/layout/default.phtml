@@ -95,9 +95,9 @@ $this->inlineScript()
                 <div class="container">
                     <ol>
                         <li><a href="/">Home</a></li>
-                        <li><?=ucfirst($this->currentRoute)?></li>
+                        <li><?=is_string($this->currentRoute) ? ucfirst($this->currentRoute) : ''?></li>
                     </ol>
-                        <h2><?=ucfirst($this->currentRoute)?></h2>
+                        <h2><?=is_string($this->currentRoute) ? ucfirst($this->currentRoute) : ''?></h2>
                 </div>
             </section><!-- End Breadcrumbs -->
             <?php endif; ?>

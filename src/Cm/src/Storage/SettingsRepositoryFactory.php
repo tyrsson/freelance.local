@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Storage;
+namespace Cm\Storage;
 
 use Axleus\Db;
 use Laminas\Db\Adapter\AdapterInterface;

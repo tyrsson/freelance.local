@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form\Fieldset;
 
-use App\Storage\Repository;
+use Cm\Storage\Repository;
 use Laminas\Form\Element\Checkbox;
 use Limatus\Form;
 

@@ -13,8 +13,8 @@ declare(strict_types=1);
         <?php
         foreach ($this->activeLinks as $link):
         ?>
-            <?php if (in_array($link, $this->showOnHome)): ?>
-                <li><a class="<?=$link['title'] === $this->currentRoute ? 'nav-link scrollto active' : 'nav-link scrollto';?>" href="<?=$link['sectionId']?>"><?=ucfirst($link['title']);?></a></li>
+            <?php if ((bool) $link['showOnHome']): ?>
+                <li><a class="<?=$link['title'] === $this->currentRoute ? 'nav-link scrollto active' : 'nav-link scrollto';?>" href="#<?=$link['sectionId']?>"><?=ucfirst($link['title']);?></a></li>
             <?php else: ?>
                 <?php if (
                         $this->user !== null

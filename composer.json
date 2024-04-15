@@ -67,7 +67,8 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/App/src/"
+            "App\\": "src/App/src/",
+            "Cm\\": "src/Cm/src/"
         }
     },
     "autoload-dev": {

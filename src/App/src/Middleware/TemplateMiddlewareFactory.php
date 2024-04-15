@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use App\Storage\PageRepository;
-use App\Storage\PartialRepository;
+use Cm\Storage\PageRepository;
+use Cm\Storage\PartialRepository;
 use Laminas\Form\FormElementManager;
 use Mezzio\Authentication\UserInterface;
 use Mezzio\Template\TemplateRendererInterface;

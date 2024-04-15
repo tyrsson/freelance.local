@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Storage\Listener;
+namespace Cm\Storage\Listener;
 
 use Laminas\Db\TableGateway\Feature\EventFeature\TableGatewayEvent;
 use Laminas\Db\TableGateway\Feature\EventFeatureEventsInterface as TargetEvent;

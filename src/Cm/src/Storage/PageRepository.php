@@ -2,16 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Storage;
+namespace Cm\Storage;
 
 use Axleus\Db;
 use Laminas\Db\ResultSet\HydratingResultSet;
 use Laminas\Db\ResultSet\ResultSetInterface;
-use Laminas\Db\Sql\Where;
+use Laminas\Db\Sql;
 
-final class PartialRepository extends Db\AbstractRepository
+final class PageRepository extends Db\AbstractRepository
 {
     use Db\RepositoryTrait;
+
+    private string $dependentTable = 'page_data';
+    private string $dependentFk    = 'pageId';
+    private string $pk             = 'id';
 
     public function findAttachedPages(
         ?string $title = 'home',
@@ -20,7 +24,7 @@ final class PartialRepository extends Db\AbstractRepository
         bool $returnArray = false
     ): ResultSetInterface|array {
 
-        $where = new Where();
+        $where = new Sql\Where();
         if ($title !== 'home') {
             $where->equalTo('title', $title);
         }
@@ -46,7 +50,7 @@ final class PartialRepository extends Db\AbstractRepository
         bool $onlyActive = true,
         bool $returnArray = false
     ): ResultSetInterface|array {
-        $where = new Where();
+        $where = new Sql\Where();
         if ($onlyActive) {
             $where->equalTo('active', '1');
         }

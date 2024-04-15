@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Middleware;
 
 use App\Form\Login;
-use App\Storage\PageRepository;
-use App\Storage\PartialRepository;
+use Cm\Storage\PageRepository;
+use Cm\Storage\PartialRepository;
 use Laminas\Form\FormElementManager;
 use Laminas\View\Model\ViewModel;
 use Mezzio\Authentication\UserInterface;
@@ -43,9 +43,9 @@ class TemplateMiddleware implements MiddlewareInterface
         $isHome      = $routeName === 'home' ? true : false;
         $settings    = $request->getAttribute('settings', null);
 
-        // we need arrays here
-        $showOnHome = ($request->getAttribute('showOnHome'));
-        $showInMenu = $request->getAttribute('showInMenu');
+        // find pages attached to the home page
+        $showOnHome = $this->pageRepo->findAttachedPages();
+        $request = $request->withAttribute('showOnHome', $showOnHome);
 
         /** @var LazySession */
         $session = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE);
@@ -104,7 +104,7 @@ class TemplateMiddleware implements MiddlewareInterface
         $nav->setVariables(
             [
                 'isHome'       => $isHome,
-                'activeLinks'  => $showInMenu + $showOnHome,
+                'activeLinks'  => $request->getAttribute('activeLinks'),
                 'showOnHome'   => $showOnHome,
                 'currentRoute' => $routeName,
                 'user'         => $user,
@@ -127,11 +127,15 @@ class TemplateMiddleware implements MiddlewareInterface
         // footer WORKS!!!!!!!!!! Follow pattern
 
         // create the footer model
-        $footerData = $this->partialRepo->findOneBySectionId('footer');
+        $resultSet = $this->partialRepo->findPartialWithData('footer');
         $footer = new ViewModel();
-        $footer->setTemplate($footerData->template);
-        //$footerVars = array_merge($this->data['footer']);
-        //$footer->setVariables($footerVars);
+        $setFlag = false;
+        foreach ($resultSet as $entity) {
+            if (! $setFlag) {
+                $footer->setTemplate($entity->template);
+            }
+            $footer->setVariable($entity->variable, $entity->value);
+        }
         $footer->setVariable('siteName', $settings?->siteName);
         $this->template->addDefaultParam(
             $this->layout,

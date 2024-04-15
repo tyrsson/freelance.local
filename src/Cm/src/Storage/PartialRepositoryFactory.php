@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Storage;
+namespace Cm\Storage;
 
 use Axleus\Db;
 use Laminas\Db\Adapter\AdapterInterface;
@@ -21,12 +21,12 @@ final class PartialRepositoryFactory
         $hydrator = new ArraySerializableHydrator();
         $repo = new PartialRepository(
             new Db\TableGateway(
-                'tpl_partial_data',
+                'tpl_partial',
                 $adapter,
                 new FeatureSet(
                     [
-                        //new RowGatewayFeature(new PartialEntity('id', 'tpl_partial', $adapter)),
-                        new Db\Feature\RelatedTableFeature(new PartialTableReference())
+                        new Db\Feature\ScrollablePdoResultFeature(),
+                        //new Db\Feature\RelatedTableFeature(new PartialTableReference())
                     ]
                 ),
                 new HydratingResultSet(

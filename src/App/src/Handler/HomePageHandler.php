@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Handler;
 
-use App\Storage\PageRepository;
-use App\Storage\PartialRepository;
+use Cm\Storage\PageRepository;
+use Cm\Storage\PartialRepository;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\View\Model\ViewModel;
 use Mezzio\Template\TemplateRendererInterface;
@@ -28,14 +28,9 @@ class HomePageHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $showOnHome = ($request->getAttribute('showOnHome'));
-        $this->template->addDefaultParam(
-            $this->homePage,
-            'showOnHome',
-            $showOnHome
-        );
+        $showOnHome = $request->getAttribute('showOnHome');
 
-        $resultSet = $this->partialRepo->findAllBySectionId('hero');
+        $resultSet = $this->partialRepo->findPartialWithData('hero');
         if ($resultSet->count() > 0) {
             $hero  = new ViewModel();
             $isSet = null;
@@ -62,18 +57,34 @@ class HomePageHandler implements RequestHandlerInterface
                 $templates[] = basename($file, '.phtml');
             }
 
+            $attachedPages = [];
             foreach ($showOnHome as $attached) {
-                if ($attached['showOnHome'] && in_array($attached['sectionId'], $templates)) {
+                if ($attached->showOnHome && in_array($attached->sectionId, $templates)) {
+                    $dependentRows = $attached->getDependentRows();
                     $child = new ViewModel();
-                    $child->setTemplate($attached['template']);
-                    $child->setVariables($attached);
+                    $child->setTemplate($attached->template);
+                    $child->setVariables($attached->toArray());
+                    if (! empty($dependentRows)) {
+                        foreach ($dependentRows as $resultSet) {
+                            foreach ($resultSet as $row) {
+                                $child->setVariable($row->variable, $row->value);
+                            }
+                        }
+                    }
+                    $attachedPages[] = $attached->sectionId;
                     $this->template->addDefaultParam(
                         $this->homePage,
-                        $attached['sectionId'],
+                        $attached->sectionId,
                         $child
                     );
                 }
             }
+
+            $this->template->addDefaultParam(
+                $this->homePage,
+                'attachedPages',
+                $attachedPages
+            );
         }
 
         return new HtmlResponse(

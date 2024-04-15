@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use App\Storage\PageRepository;
-use App\Storage\SettingsRepository;
+use Cm\Storage\PageRepository;
+use Cm\Storage\SettingsRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -23,16 +23,16 @@ class ContextMiddleware implements MiddlewareInterface
     {
         $settings = $this->settingsRepo->fetchContext();
         $request  = $request->withAttribute('settings', $settings);
-        $pages    = $this->pageRepo->findAll();
-        $request  = $request->withAttribute('pages', $pages);
-        $request  = $request->withAttribute(
-            'showOnHome',
-            $this->pageRepo->findAttachedPages(returnArray: true)
-        );
+        // $pages    = $this->pageRepo->findAll();
+        // $request  = $request->withAttribute('pages', $pages);
+
+        $menu     = $this->pageRepo->findMenu();
+
         $request  = $request->withAttribute(
             'showInMenu',
-            $this->pageRepo->findMenu(returnArray: true)
+            $menu
         );
+        $request  = $request->withAttribute('activeLinks', $menu);
         return $handler->handle($request);
     }
 }

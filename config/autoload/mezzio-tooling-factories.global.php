@@ -7,7 +7,7 @@
  * removing factory definitions; other dependency types may be overwritten
  * when regenerating this file via mezzio-tooling commands.
  */
-
+ 
 declare(strict_types=1);
 
 return [
@@ -21,6 +21,7 @@ return [
             App\Middleware\ContactMiddleware::class => App\Middleware\ContactMiddlewareFactory::class,
             App\Middleware\ContextMiddleware::class => App\Middleware\ContextMiddlewareFactory::class,
             App\Middleware\TemplateMiddleware::class => App\Middleware\TemplateMiddlewareFactory::class,
+            Cm\List\Handler\NewListHandler::class => Cm\List\Handler\NewListHandlerFactory::class,
         ],
     ],
 ];
