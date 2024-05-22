@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cm\List\Handler;
 
+use Cm\List\Form\ListForm;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -17,8 +18,10 @@ class NewListHandler implements RequestHandlerInterface
      */
     private $renderer;
 
-    public function __construct(TemplateRendererInterface $renderer)
-    {
+    public function __construct(
+        TemplateRendererInterface $renderer,
+        private ListForm $form
+    ) {
         $this->renderer = $renderer;
     }
 
@@ -28,7 +31,7 @@ class NewListHandler implements RequestHandlerInterface
         // Render and return a response:
         return new HtmlResponse($this->renderer->render(
             'cm::new-list',
-            [] // parameters to pass to template
+            ['form' => $this->form] // parameters to pass to template
         ));
     }
 }

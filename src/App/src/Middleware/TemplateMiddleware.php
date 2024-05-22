@@ -59,6 +59,12 @@ class TemplateMiddleware implements MiddlewareInterface
 
         $this->template->addDefaultParam(
             TemplateRendererInterface::TEMPLATE_ALL,
+            'user',
+            $user
+        );
+
+        $this->template->addDefaultParam(
+            TemplateRendererInterface::TEMPLATE_ALL,
             'isHome',
             $isHome
         );

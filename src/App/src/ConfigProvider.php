@@ -32,6 +32,7 @@ class ConfigProvider
     public function __invoke(): array
     {
         return [
+            'authentication' => $this->getAuthenticationConfig(),
             'dependencies'   => $this->getDependencies(),
             // config to use seeding the FormElementManager (ie a plugin manager)
             'form_elements'  => $this->getFormElementConfig(),
@@ -45,6 +46,15 @@ class ConfigProvider
              * It can be added to any ConfigProvider to aggregate configuration to the view helpers
              */
             'view_helper_config' => $this->getViewHelperConfig(),
+        ];
+    }
+
+    public function getAuthenticationConfig(): array
+    {
+        return [
+            'redirect' => '/login',
+            'username' => 'username',
+            'password' => 'hash',
         ];
     }
 

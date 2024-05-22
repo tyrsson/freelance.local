@@ -22,9 +22,9 @@ final class TableGateway extends Db\AbstractRepository implements UserRepository
     private $userFactory;
 
     public function __construct(
-        private Db\TableGateway $gateway,
+        protected Db\TableGateway $gateway,
         callable $userFactory,
-        private ReflectionHydrator $hydrator = new ReflectionHydrator(),
+        $hydrator = new ReflectionHydrator(),
     ) {
         parent::__construct($gateway, $hydrator);
         // Provide type safety for the composed user factory.

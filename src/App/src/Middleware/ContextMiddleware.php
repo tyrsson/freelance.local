@@ -23,11 +23,7 @@ class ContextMiddleware implements MiddlewareInterface
     {
         $settings = $this->settingsRepo->fetchContext();
         $request  = $request->withAttribute('settings', $settings);
-        // $pages    = $this->pageRepo->findAll();
-        // $request  = $request->withAttribute('pages', $pages);
-
         $menu     = $this->pageRepo->findMenu();
-
         $request  = $request->withAttribute(
             'showInMenu',
             $menu

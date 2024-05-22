@@ -20,10 +20,12 @@ final class SettingsRepositoryFactory
         $em      = $container->get(EventManagerInterface::class);
         return new SettingsRepository(
             new Db\TableGateway(
-                'settings',
+                Schema::Settings->value,
                 $adapter,
-                new FeatureSet([new RowGatewayFeature(new SettingsEntity('id', 'settings', $adapter))]),
-                new ResultSet()
+                new FeatureSet([
+                    new Db\Feature\ScrollablePdoResultFeature(),
+                    new RowGatewayFeature(new SettingsEntity(PrimaryKey::Pk->value, Schema::Settings->value, $adapter))
+                ])
             ),
         );
     }

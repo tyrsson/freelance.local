@@ -21,6 +21,7 @@ class ConfigProvider
     {
         return [
             'dependencies' => $this->getDependencies(),
+            'form_elements' => $this->getFormElementConfig(),
             'templates'    => $this->getTemplates(),
         ];
     }
@@ -40,6 +41,17 @@ class ConfigProvider
                 Storage\PageRepository::class      => Storage\PageRepositoryFactory::class,
                 Storage\PartialRepository::class   => Storage\PartialRepositoryFactory::class,
                 Storage\SettingsRepository::class  => Storage\SettingsRepositoryFactory::class,
+            ],
+        ];
+    }
+
+    public function getFormElementConfig(): array
+    {
+        return [
+            'factories' => [
+                List\Form\Fieldset\ListFieldset::class      => List\Form\Fieldset\ListFieldsetFactory::class,
+                List\Form\Fieldset\ListItemsFieldset::class => List\Form\Fieldset\ListItemsFieldsetFactory::class,
+                List\Form\ListForm::class                   => List\Form\ListFormFactory::class,
             ],
         ];
     }

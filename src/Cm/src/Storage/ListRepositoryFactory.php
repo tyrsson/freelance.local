@@ -19,13 +19,13 @@ final class ListRepositoryFactory
         $ref->addReference([
             'dependent_table' => $container->get(ListItemsRepository::class),
             'ref_type'        => Db\Feature\RelatedTable\ReferenceInterface::REF_DEPENDENT,
-            'column_map'      => ['local' => 'id', 'fk' => 'listId'],
+            'column_map'      => ['local' => PrimaryKey::Pk, 'fk' => 'listId'],
         ]);
-        $rowGatewayPrototype = new ListEntity('id', 'list', $adapter);
+        $rowGatewayPrototype = new ListEntity(PrimaryKey::Pk->value, Schema::List->value, $adapter);
         $rowGatewayPrototype->setReferenceProvider($ref);
         return new ListRepository(
             new Db\TableGateway(
-                'list',
+                Schema::List->value,
                 $adapter,
                 new FeatureSet([
                     new Db\Feature\ScrollablePdoResultFeature(),

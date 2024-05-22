@@ -13,33 +13,25 @@ declare(strict_types=1);
         <?php
         foreach ($this->activeLinks as $link):
         ?>
-            <?php if ((bool) $link['showOnHome']): ?>
-                <li><a class="<?=$link['title'] === $this->currentRoute ? 'nav-link scrollto active' : 'nav-link scrollto';?>" href="#<?=$link['sectionId']?>"><?=ucfirst($link['title']);?></a></li>
-            <?php else: ?>
-                <?php if (
-                        $this->user !== null
-                        && $link['title'] === 'login'
-                        && $this->settings->enableLogin
-                        && ! $this->settings->enableLoginModal
-                    ): ?>
-                    <li><a class="<?=$link['title'] === $this->currentRoute ? 'nav-link active' : 'nav-link';?>" href="<?=$this->url('logout')?>">Logout</a></li>
-                <?php elseif(
-                        $link === 'login'
-                        && $this->settings->enableLogin
-                        && ! $this->settings->enableLoginModal
-                    ): ?>
-                    <li><a class="<?=$link['title'] === $this->currentRoute ? 'nav-link active' : 'nav-link';?>" href="/<?=$link['title'];?>"><?=ucfirst($link['title']);?></a></li>
-                <?php elseif(
-                        $link['title'] === 'login'
-                        && $this->settings->enableLogin
-                        && $this->settings->enableLoginModal
-                    ): ?>
-                    <li><a id="open-login-modal" class="<?=$link['title'] === $this->currentRoute ? 'nav-link active' : 'nav-link';?>" href="#"><?=ucfirst($link['title']);?></a></li>
-                <?php endif; ?>
+            <?php if ((bool) $link?->showOnHome): ?>
+                <li><a class="<?=$link?->title === $this->currentRoute ? 'nav-link scrollto active' : 'nav-link scrollto';?>" href="#<?=$link?->sectionId?>"><?=ucfirst($link?->title);?></a></li>
             <?php endif; ?>
         <?php
         endforeach;
         ?>
+        <?php if (
+                $this->user !== null
+                && (bool) $this->settings->enableLogin
+                && ! (bool) $this->settings->enableLoginModal
+            ): ?>
+            <li><a class="<?=$this->url('logout') === $this->currentRoute ? 'nav-link active' : 'nav-link';?>" href="<?=$this->url('logout')?>">Logout</a></li>
+
+        <?php elseif($this->user === null && $this->settings->enableLogin && ! $this->settings->enableLoginModal): ?>
+            <li><a class="<?=$this->url('login') === $this->currentRoute ? 'nav-link active' : 'nav-link';?>" href="<?=$this->url('login')?>">Login</a></li>
+
+        <?php elseif($this->user === null && $this->settings->enableLogin && $this->settings->enableLoginModal): ?>
+            <li><a id="open-login-modal" class="btn btn-primary" href="#">Login</a></li>
+        <?php endif; ?>
         <?php
         // disable support for this for the moment
         if ($this->settings->enableDropDownMenu) {

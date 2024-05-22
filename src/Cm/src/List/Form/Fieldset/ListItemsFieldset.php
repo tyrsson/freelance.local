@@ -27,7 +27,7 @@ final class ListItemsFieldset extends Form\Fieldset implements InputFilterProvid
         $this->setHydrator(new ArraySerializableHydrator());
         $this->setObject(
             new ListItemsEntity(
-                PrimaryKey::ListItems->value,
+                PrimaryKey::Pk->value,
                 Schema::ListItems->value,
                 $this->adapter
             )

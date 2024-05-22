@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace App\UserRepository;
 
 use Axleus\Db;
+use Cm\Storage\PrimaryKey;
+use Cm\Storage\Schema;
+use Laminas\Db\RowGateway\RowGateway;
 
-final class UserEntity implements Db\EntityInterface
+final class UserEntity
 {
     use Db\EntityTrait;
 
@@ -16,6 +19,7 @@ final class UserEntity implements Db\EntityInterface
         #[\SensitiveParameter]
         private ?string $hash = null
     ) {
+        // parent::__construct(PrimaryKey::User->value, Schema::User->value, )
     }
 
     public function setId(int $id): void

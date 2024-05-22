@@ -53,17 +53,19 @@
         "mezzio/mezzio-helpers": "^5.7",
         "mezzio/mezzio-laminasviewrenderer": "^2.15",
         "mezzio/mezzio-session-ext": "^1.19",
-        "webinertia/limatus": "^0.0.14"
+        "webinertia/limatus": "^0.0.14",
+        "webinertia/webinertia-filter": "^0.0.5"
     },
     "require-dev": {
+        "filp/whoops": "^2.15.4",
         "laminas/laminas-coding-standard": "~2.5.0",
         "laminas/laminas-development-mode": "^3.12.0",
         "mezzio/mezzio-tooling": "^2.9",
+        "phpbench/phpbench": "^1.2",
         "phpunit/phpunit": "^10.5.5",
         "psalm/plugin-phpunit": "^0.18.4",
         "roave/security-advisories": "dev-master",
-        "vimeo/psalm": "^5.18",
-        "filp/whoops": "^2.15.4"
+        "vimeo/psalm": "^5.18"
     },
     "autoload": {
         "psr-4": {
@@ -73,7 +75,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "AppTest\\": "test/AppTest/"
+            "AppTest\\": "test/AppTest/",
+            "Bench\\": "test/Bench/"
         }
     },
     "scripts": {

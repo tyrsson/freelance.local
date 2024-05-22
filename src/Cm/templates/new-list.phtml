@@ -1,1 +1,16 @@
-Template for Cm\List\Handler\NewListHandler
+<?php
+
+declare(strict_types=1);
+
+use Limatus\Vendor\Bootstrap\LayoutMode;
+?>
+<section class="inner-page">
+    <div class="container">
+        <?php
+            if (isset($this->form)) {
+                //$helper = $this->form->setAttribute('action', $this->url('login'));
+                echo $this->form($this->form);
+            }
+        ?>
+    </div>
+</section>

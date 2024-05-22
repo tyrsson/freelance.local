@@ -17,9 +17,7 @@ final class SettingsRepository extends AbstractRepository
         $result = $this->gateway->select();
         $container = new ArrayObject([], ArrayObject::ARRAY_AS_PROPS);
         foreach ($result as $row) {
-            foreach ($row as $column) {
-                $container->variable = $column->variable;
-            }
+            $container->offsetSet($row->variable, $row->value);
         }
         return $container;
     }
