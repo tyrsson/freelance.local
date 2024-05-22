@@ -14,7 +14,6 @@ $cacheConfig = [
 ];
 
 $aggregator = new ConfigAggregator([
-    \Cm\ConfigProvider::class,
     \Laminas\Db\ConfigProvider::class,
     \Axleus\Db\ConfigProvider::class,
     \Laminas\I18n\ConfigProvider::class,
@@ -54,6 +53,7 @@ $aggregator = new ConfigAggregator([
 
     // Default App module config
     App\ConfigProvider::class,
+    \Cm\ConfigProvider::class,
 
     // Load application config in a pre-defined order in such a way that local settings
     // overwrite global settings. (Loaded as first to last):

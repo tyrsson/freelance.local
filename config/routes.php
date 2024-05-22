@@ -106,5 +106,13 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         ],
         'logout'
     );
+    $app->route(
+        '/cm/new/list',
+        [
+            BodyParamsMiddleware::class,
+            AuthenticationMiddleware::class,
+            Cm\List\Handler\NewListHandler::class,
+        ],
+    );
     $app->get('/api/ping', App\Handler\PingHandler::class, 'api.ping');
 };
